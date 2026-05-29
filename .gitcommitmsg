@@ -1,11 +1,3 @@
-feat: wire auth middleware and create database schema
-
-- Auth middleware (proxy.ts) auto-detected by Next.js 16, no changes needed
-- Created supabase/migrations/001_core_schema.sql with all tables:
-  profiles, subscriptions, businesses, reviews, responses,
-  response_templates, usage
-- RLS policies on all tables scoped to authenticated users
-- Auto-create profile trigger on new auth.users insert
-- Performance indexes on all foreign keys and query columns
+feat: expand landing page with pricing, Birdeye comparison, FAQ
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

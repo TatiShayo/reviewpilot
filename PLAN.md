@@ -2,11 +2,11 @@
 
 ## PHASE 1: STABILIZE & AUTH
 - [x] Build passes clean
-- [ ] Auth flow works (signup → login → dashboard)
-- [ ] Supabase schema: profiles, subscriptions, businesses, reviews, responses tables
+- [x] Auth flow works (signup → login → dashboard)
+- [x] Supabase schema: profiles, subscriptions, businesses, reviews, responses tables
 
 ## PHASE 2: CORE PRODUCT
-- [ ] Landing page: hero, features, pricing, comparison vs Birdeye, FAQ
+- [x] Landing page: hero, features, pricing, comparison vs Birdeye, FAQ
 - [ ] Dashboard: stat cards (reviews today, response rate, avg rating, locations connected)
 - [ ] Business management: add/edit business (name, GMB ID, category, address)
 - [ ] Reviews list: shows reviews pulled from GMB (mock data for MVP, real OAuth later)
