@@ -8,7 +8,7 @@
 ## PHASE 2: CORE PRODUCT
 - [x] Landing page: hero, features, pricing, comparison vs Birdeye, FAQ
 - [x] Dashboard: stat cards (reviews today, response rate, avg rating, locations connected)
-- [ ] Business management: add/edit business (name, GMB ID, category, address)
+- [x] Business management: add/edit business (name, GMB ID, category, address)
 - [ ] Reviews list: shows reviews pulled from GMB (mock data for MVP, real OAuth later)
 - [ ] Review card: star rating, author, date, review text, "Generate Response" button
 - [ ] AI response generation: POST /api/ai/respond → OpenAI → returns 3 tone variations (professional, friendly, brief)
