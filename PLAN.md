@@ -7,7 +7,7 @@
 
 ## PHASE 2: CORE PRODUCT
 - [x] Landing page: hero, features, pricing, comparison vs Birdeye, FAQ
-- [ ] Dashboard: stat cards (reviews today, response rate, avg rating, locations connected)
+- [x] Dashboard: stat cards (reviews today, response rate, avg rating, locations connected)
 - [ ] Business management: add/edit business (name, GMB ID, category, address)
 - [ ] Reviews list: shows reviews pulled from GMB (mock data for MVP, real OAuth later)
 - [ ] Review card: star rating, author, date, review text, "Generate Response" button
