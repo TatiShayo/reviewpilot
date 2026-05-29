@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { getMockReviews, type ReviewData } from '@/lib/mock-data'
+import { createClient } from '@/lib/supabase/client'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -11,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, ArrowUpDown } from 'lucide-react'
+import { Search, ArrowUpDown, Check, ExternalLink } from 'lucide-react'
 
 export default function ReviewsPage() {
   const [reviews] = useState<ReviewData[]>(() => getMockReviews())
@@ -117,6 +119,10 @@ function ReviewCard({ review }: { review: ReviewData }) {
   const [generating, setGenerating] = useState(false)
   const [responses, setResponses] = useState<Record<string, string> | null>(null)
   const [selectedTone, setSelectedTone] = useState<string | null>(null)
+  const [approved, setApproved] = useState(false)
+  const [approving, setApproving] = useState(false)
+  const [posted, setPosted] = useState(false)
+  const [posting, setPosting] = useState(false)
 
   async function handleGenerate() {
     setGenerating(true)
@@ -138,6 +144,62 @@ function ReviewCard({ review }: { review: ReviewData }) {
       console.error(err)
     } finally {
       setGenerating(false)
+    }
+  }
+
+  async function handleApprove() {
+    if (!responses || !selectedTone) return
+    setApproving(true)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (user) {
+        const { error } = await supabase.from('responses').insert({
+          review_id: review.id,
+          business_id: review.business_id,
+          professional: responses.professional || null,
+          friendly: responses.friendly || null,
+          brief: responses.brief || null,
+          approved_tone: selectedTone,
+          approved: true,
+        })
+        if (error) throw error
+      }
+
+      setApproved(true)
+      toast.success('Response approved' + (user ? '' : ' (mock)'))
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to approve')
+    } finally {
+      setApproving(false)
+    }
+  }
+
+  async function handlePostToGoogle() {
+    setPosting(true)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (user) {
+        const { error } = await supabase
+          .from('responses')
+          .update({ posted_to_google: true, posted_at: new Date().toISOString() })
+          .eq('review_id', review.id)
+          .eq('approved', true)
+
+        if (error) throw error
+      }
+
+      setPosted(true)
+      const gmbUrl = `https://business.google.com/reviews/l/${review.business_id}`
+      window.open(gmbUrl, '_blank')
+      toast.success('Opening Google My Business')
+    } catch (err: any) {
+      toast.error(err.message || 'Failed')
+    } finally {
+      setPosting(false)
     }
   }
 
@@ -202,7 +264,7 @@ function ReviewCard({ review }: { review: ReviewData }) {
         </div>
       )}
 
-      {selectedTone && responses && (
+      {selectedTone && responses && !approved && (
         <div className="mt-4 border-t pt-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-xs font-semibold uppercase tracking-wide text-green-700 dark:text-green-400">
@@ -213,13 +275,44 @@ function ReviewCard({ review }: { review: ReviewData }) {
             {responses[selectedTone]}
           </p>
           <div className="flex items-center gap-2 mt-3">
-            <Button size="sm" onClick={() => setSelectedTone(null)}>
-              Approve
+            <Button size="sm" onClick={handleApprove} disabled={approving}>
+              {approving ? 'Approving...' : 'Approve'}
             </Button>
             <Button size="sm" variant="outline" onClick={() => { setSelectedTone(null); setResponses(null) }}>
               Back
             </Button>
           </div>
+        </div>
+      )}
+
+      {approved && (
+        <div className="mt-4 border-t pt-4">
+          <div className="flex items-center gap-2">
+            <Check className="h-5 w-5 text-green-600" />
+            <span className="text-sm font-medium text-green-700 dark:text-green-400">
+              Response approved — {selectedTone} tone
+            </span>
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {responses?.[selectedTone || '']}
+          </p>
+          {!posted && (
+            <Button
+              size="sm"
+              className="mt-3"
+              onClick={handlePostToGoogle}
+              disabled={posting}
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              {posting ? 'Posting...' : 'Post to Google'}
+            </Button>
+          )}
+          {posted && (
+            <p className="mt-3 text-sm text-green-700 dark:text-green-400 flex items-center gap-1.5">
+              <Check className="h-4 w-4" />
+              Posted to Google My Business
+            </p>
+          )}
         </div>
       )}
     </div>

@@ -11,11 +11,11 @@
 - [x] Business management: add/edit business (name, GMB ID, category, address)
 - [x] Reviews list: shows reviews pulled from GMB (mock data for MVP, real OAuth later)
 - [x] Review card: star rating, author, date, review text, "Generate Response" button
-- [ ] AI response generation: POST /api/ai/respond → OpenAI → returns 3 tone variations (professional, friendly, brief)
-- [ ] One-click approve: marks response as approved, shows green checkmark
-- [ ] Post to Google: "Post Response" button (deep-links to GMB for now, full API post after OAuth)
-- [ ] Response history: list of all posted responses with dates
-- [ ] Auto-responder toggle: "Auto-reply to all new reviews" (stores preference, triggers on webhook)
+- [x] AI response generation: POST /api/ai/respond → OpenAI → returns 3 tone variations (professional, friendly, brief)
+- [x] One-click approve: marks response as approved, shows green checkmark, persists to Supabase responses table
+- [x] Post to Google: "Post Response" button (deep-links to GMB, marks posted_to_google in Supabase)
+- [x] Response history: /dashboard/responses page listing all approved/posted responses with dates
+- [x] Auto-responder toggle: "Auto-reply to all new reviews" switch on business cards, stores preference in Supabase
 
 ## PHASE 3: SETTINGS & BILLING
 - [ ] Business settings: custom response tone, signature, blacklisted words

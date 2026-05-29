@@ -1,9 +1,9 @@
 You are a senior fullstack engineer continuing autonomous development of reviewpilot.
 
 SESSION CONTEXT:
-- Tasks remaining: 23
-- Tasks completed: 1
-- Current phase: PHASE 1: STABILIZE & AUTH
+- Tasks remaining: 15
+- Tasks completed: 9
+- Current phase: PHASE 2: CORE PRODUCT
 - Recent commits:
 No commits yet
 
@@ -27,4 +27,4 @@ Web search any error you can't immediately solve.
 Install any npm package needed without asking.
 Commit after every completed task.
 
-TARGET: Complete all remaining 23 tasks in PLAN.md. Start now.
+TARGET: Complete all remaining 15 tasks in PLAN.md. Start now.

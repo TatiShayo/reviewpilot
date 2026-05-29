@@ -24,7 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, Pencil, MapPin } from 'lucide-react'
+import { Plus, Pencil, MapPin, RefreshCw } from 'lucide-react'
+import { Switch } from '@/components/ui/switch'
 
 const businessSchema = z.object({
   name: z.string().min(1, 'Business name is required'),
@@ -45,6 +46,8 @@ interface Business {
   address?: string
   phone?: string
   website?: string
+  autoRespondEnabled?: boolean
+  responseTone?: string
 }
 
 export default function BusinessesPage() {
@@ -144,6 +147,38 @@ export default function BusinessesPage() {
       toast.error(err.message || 'Failed to save business')
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function toggleAutoRespond(business: Business) {
+    const enabled = !business.autoRespondEnabled
+    setBusinesses((prev) =>
+      prev.map((b) =>
+        b.id === business.id ? { ...b, autoRespondEnabled: enabled } : b
+      )
+    )
+
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (user) {
+        const { error } = await supabase
+          .from('businesses')
+          .update({ auto_respond_enabled: enabled })
+          .eq('id', business.id)
+
+        if (error) throw error
+      }
+
+      toast.success(enabled ? 'Auto-responder enabled' : 'Auto-responder disabled')
+    } catch (err: any) {
+      setBusinesses((prev) =>
+        prev.map((b) =>
+          b.id === business.id ? { ...b, autoRespondEnabled: !enabled } : b
+        )
+      )
+      toast.error(err.message || 'Failed to toggle auto-responder')
     }
   }
 
@@ -257,6 +292,21 @@ export default function BusinessesPage() {
                 )}
                 {business.gmbId && (
                   <p className="mt-2 text-xs text-muted-foreground">GMB: {business.gmbId}</p>
+                )}
+                <div className="mt-3 pt-3 border-t flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <RefreshCw className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Auto-respond</span>
+                  </div>
+                  <Switch
+                    checked={business.autoRespondEnabled || false}
+                    onCheckedChange={() => toggleAutoRespond(business)}
+                  />
+                </div>
+                {business.autoRespondEnabled && business.responseTone && (
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    Tone: {business.responseTone}
+                  </p>
                 )}
               </div>
             ))}
