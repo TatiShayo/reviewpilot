@@ -1,5 +1,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
+import Link from "next/link"
+import React from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -40,12 +42,18 @@ const buttonVariants = cva(
   }
 )
 
+type ButtonProps = Omit<ButtonPrimitive.Props, "render"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }
+
 function Button({
   className,
   variant = "default",
   size = "default",
+  asChild,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonProps) {
   return (
     <ButtonPrimitive
       data-slot="button"
@@ -55,4 +63,20 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+function ButtonLink({
+  className,
+  variant = "default",
+  size = "default",
+  href,
+  ...props
+}: React.ComponentProps<typeof Link> & VariantProps<typeof buttonVariants>) {
+  return (
+    <Link
+      className={cn(buttonVariants({ variant, size, className }))}
+      href={href}
+      {...props}
+    />
+  )
+}
+
+export { Button, ButtonLink, buttonVariants }

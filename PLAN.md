@@ -1,7 +1,7 @@
 ## ReviewPilot Build Plan
 
 ## PHASE 1: STABILIZE & AUTH
-- [ ] Build passes clean
+- [x] Build passes clean
 - [ ] Auth flow works (signup → login → dashboard)
 - [ ] Supabase schema: profiles, subscriptions, businesses, reviews, responses tables
 
