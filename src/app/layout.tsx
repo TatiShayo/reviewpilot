@@ -16,7 +16,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ReviewPilot — Respond to every review in one click",
-  description: "AI-powered review responses for Google My Business. Sound human every time.",
+  description:
+    "AI-powered review responses for Google My Business. Sound human every time.",
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "ReviewPilot — Respond to every review in one click",
+    description:
+      "AI-powered review responses for Google My Business. Sound human every time.",
+    type: "website",
+    siteName: "ReviewPilot",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ReviewPilot — Respond to every review in one click",
+    description:
+      "AI-powered review responses for Google My Business. Sound human every time.",
+  },
 };
 
 export default function RootLayout({

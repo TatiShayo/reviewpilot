@@ -1,5 +1,3 @@
-import { subDays } from 'date-fns'
-
 export interface ReviewData {
   id: string
   business_id: string
@@ -26,6 +24,11 @@ const MOCK_BUSINESSES = [
   { id: 'b2', name: 'Coastal Dental Care' },
 ]
 
+function daysAgo(n: number): Date {
+  // UTC to avoid SSR mismatch across timezones
+  return new Date(Date.UTC(2026, 4, 30 - n, 12, 0, 0, 0))
+}
+
 const MOCK_REVIEWS: ReviewData[] = [
   {
     id: 'r1',
@@ -34,7 +37,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'Maria G.',
     rating: 5,
     text: 'Best croissants in town! The owner is so friendly and the coffee is always perfect. I come here every morning before work.',
-    date: new Date(),
+    date: daysAgo(0),
     sentiment: 'positive',
     response: null,
   },
@@ -45,7 +48,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'James T.',
     rating: 4,
     text: 'Great atmosphere and delicious pastries. Would love to see more gluten-free options on the menu.',
-    date: subDays(new Date(), 1),
+    date: daysAgo(1),
     sentiment: 'positive',
     response: null,
   },
@@ -56,7 +59,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'Linda P.',
     rating: 5,
     text: 'Dr. Chen was amazing with my daughter. She was so nervous about her first filling but the team made her feel completely at ease.',
-    date: subDays(new Date(), 0),
+    date: daysAgo(0),
     sentiment: 'positive',
     response: null,
   },
@@ -67,7 +70,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'Robert K.',
     rating: 2,
     text: 'Had to wait 30 minutes past my appointment time. Front desk was apologetic but it messed up my whole morning schedule.',
-    date: subDays(new Date(), 2),
+    date: daysAgo(2),
     sentiment: 'negative',
     response: null,
   },
@@ -78,7 +81,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'Anna W.',
     rating: 3,
     text: 'The food is good but the prices have gone up recently. Still a nice spot but not the bargain it used to be.',
-    date: subDays(new Date(), 3),
+    date: daysAgo(3),
     sentiment: 'neutral',
     response: null,
   },
@@ -89,7 +92,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'David L.',
     rating: 5,
     text: 'Their avocado toast is literally the best thing on their menu. Came here with friends and everyone loved their meals.',
-    date: subDays(new Date(), 0),
+    date: daysAgo(0),
     sentiment: 'positive',
     response: null,
   },
@@ -100,7 +103,7 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'Sarah M.',
     rating: 4,
     text: 'Clean office, friendly staff. The hygienist did a thorough cleaning. Booking appointments online would be a nice addition.',
-    date: subDays(new Date(), 4),
+    date: daysAgo(4),
     sentiment: 'positive',
     response: null,
   },
@@ -111,18 +114,17 @@ const MOCK_REVIEWS: ReviewData[] = [
     author: 'Mike R.',
     rating: 1,
     text: 'Ordered delivery and it arrived cold and missing items. Called to complain and got attitude from the manager. Never again.',
-    date: subDays(new Date(), 5),
+    date: daysAgo(5),
     sentiment: 'negative',
     response: null,
   },
 ]
 
 export function getDashboardStats(): DashboardStats {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const today = new Date(Date.UTC(2026, 4, 30, 12, 0, 0, 0))
 
   const reviewsToday = MOCK_REVIEWS.filter(
-    (r) => r.date >= today
+    (r) => r.date.getTime() >= today.getTime()
   )
 
   const respondedReviews = MOCK_REVIEWS.filter((r) => r.response)

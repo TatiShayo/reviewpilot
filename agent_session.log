@@ -117,3 +117,34 @@ SESSION: 2026-05-30 11:48:49.111869
 ==================================================
 SESSION: 2026-05-30 11:52:18.604123
 ==================================================
+
+==================================================
+SESSION: 2026-05-30 13:03:55.424953
+==================================================
+
+==================================================
+SESSION: 2026-05-30 13:12:11.251668
+==================================================
+I'm picking up the ReviewPilot build session. Let me run the startup sequence.Build passes. One TS error in tests, but PLAN.md first. Let me read the plan and learnings.Build passes, one TS test error (non-blocking), LEARNINGS.md is empty. First unchecked task is **Phase 4: E2e: review card → generate → approve flow**. Let me set up the todos and check what's already in Cypress.Let me check the actual review page and the auth bypass to understand what selectors and flows are real.The test has some issues - the sentiment/rating filters are inside invisible select popovers, and the OpenAI API call needs to be intercepted. Let me fix the test to work end-to-end.Let me check the API route and mock data to understand what needs to be intercepted.The test needs to intercept the `/api/ai/respond` call since the API requires Supabase auth, and the e2e bypass only skips layout auth. Let me rewrite the test.Now let me run the Cypress tests.Need the dev server running. Let me start it and run tests.Dev server is on port 3000. Let me run Cypress now.The dev server is returning 500. Let me check what's happening.
+
+==================================================
+SESSION: 2026-05-30 20:04:08.748167
+==================================================
+
+==================================================
+SESSION: 2026-05-30 20:40:14.958491
+==================================================
+
+==================================================
+SESSION: 2026-05-30 20:44:56.333610
+==================================================
+
+==================================================
+SESSION: 2026-05-30 20:50:02.565454
+==================================================
+Error: Network connection lost.
+
+==================================================
+SESSION: 2026-05-30 20:57:37.981194
+==================================================
+Error: Network connection lost.

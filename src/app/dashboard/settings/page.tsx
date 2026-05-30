@@ -55,12 +55,25 @@ const DIGEST_OPTIONS = [
   { value: 'never', label: 'Never' },
 ]
 
+type Template = {
+  id: string
+  name: string
+  tone: string
+  body: string
+  created_at: string
+}
+
 export default function SettingsPage() {
   const [userEmail, setUserEmail] = useState('')
   const [loading, setLoading] = useState(true)
   const [savingProfile, setSavingProfile] = useState(false)
   const [savingDefaults, setSavingDefaults] = useState(false)
   const [savingNotifications, setSavingNotifications] = useState(false)
+  const [templates, setTemplates] = useState<Template[]>([])
+  const [templateName, setTemplateName] = useState('')
+  const [templateTone, setTemplateTone] = useState('professional')
+  const [templateBody, setTemplateBody] = useState('')
+  const [savingTemplate, setSavingTemplate] = useState(false)
 
   const profileForm = useForm({
     resolver: zodResolver(profileSchema),
@@ -131,6 +144,19 @@ export default function SettingsPage() {
       }
     }
     load()
+  }, [])
+
+  useEffect(() => {
+    async function loadTemplates() {
+      try {
+        const res = await fetch('/api/templates')
+        if (res.ok) {
+          const data = await res.json()
+          setTemplates(data.templates || [])
+        }
+      } catch {}
+    }
+    loadTemplates()
   }, [])
 
   async function onSaveProfile(data: { fullName: string; companyName?: string }) {
@@ -209,6 +235,39 @@ export default function SettingsPage() {
     }
   }
 
+  async function handleCreateTemplate() {
+    if (!templateName.trim() || !templateBody.trim()) return
+    setSavingTemplate(true)
+    try {
+      const res = await fetch('/api/templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: templateName.trim(), tone: templateTone, body: templateBody.trim() }),
+      })
+      if (!res.ok) throw new Error('Failed')
+      const data = await res.json()
+      setTemplates((prev) => [...prev, data.template])
+      setTemplateName('')
+      setTemplateBody('')
+      toast.success('Template created')
+    } catch {
+      toast.error('Failed to create template')
+    } finally {
+      setSavingTemplate(false)
+    }
+  }
+
+  async function handleDeleteTemplate(id: string) {
+    try {
+      const res = await fetch(`/api/templates?id=${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed')
+      setTemplates((prev) => prev.filter((t) => t.id !== id))
+      toast.success('Template deleted')
+    } catch {
+      toast.error('Failed to delete template')
+    }
+  }
+
   if (loading) {
     return (
       <main className="flex-1 p-6 max-w-2xl mx-auto w-full">
@@ -227,6 +286,7 @@ export default function SettingsPage() {
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="defaults">Response Defaults</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="templates">Templates</TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">

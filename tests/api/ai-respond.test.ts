@@ -7,7 +7,7 @@ const mockBusinessSelect = vi.fn()
 const mockProfileUpdate = vi.fn()
 
 vi.mock('openai', () => ({
-  default: function OpenAI() {
+  default: function OpenAI(this: any) {
     this.chat = { completions: { create: mockChatCreate } }
   },
 }))
