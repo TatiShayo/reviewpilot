@@ -18,7 +18,7 @@
 - [x] Auto-responder toggle: "Auto-reply to all new reviews" switch on business cards, stores preference in Supabase
 
 ## PHASE 3: SETTINGS & BILLING
-- [ ] Business settings: custom response tone, signature, blacklisted words
+- [x] Business settings: custom response tone, signature, blacklisted words
 - [ ] Stripe subscription integration
 - [ ] Usage tracking (responses used this month)
 

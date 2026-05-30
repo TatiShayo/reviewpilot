@@ -135,6 +135,7 @@ function ReviewCard({ review }: { review: ReviewData }) {
           author: review.author,
           rating: review.rating,
           business_name: review.business_name,
+          business_id: review.business_id,
         }),
       })
       if (!res.ok) throw new Error('Failed to generate')
