@@ -37,7 +37,7 @@
 
 ## PHASE 7: PRODUCTION HARDENING
 - [x] Add Zod validation to ALL API routes (ai/respond, ai/sentiment, businesses, reviews)
-- [ ] Add rate limiting to AI respond route: max 10 calls/minute per user (use in-memory Map with timestamp window)
+- [x] Add rate limiting to AI respond route: max 10 calls/minute per user (use in-memory Map with timestamp window)
 - [ ] Add proper error boundaries to every dashboard page (error.tsx files)
 - [ ] Add loading.tsx skeleton screens to every dashboard route
 - [ ] Fix any remaining TypeScript errors: npx tsc --noEmit must return 0 errors
