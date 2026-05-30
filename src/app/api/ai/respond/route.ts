@@ -82,6 +82,17 @@ export async function POST(request: NextRequest) {
       TONE_PROMPTS.brief += ` IMPORTANT: Do NOT use any of these words/phrases: ${bl}.`
     }
 
+    const { data: templates } = await supabase
+      .from('response_templates')
+      .select('name, tone, body')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: true })
+
+    const templateHints =
+      templates && templates.length > 0
+        ? `\n\nUse these templates as style references for your responses. Match the tone and patterns shown (but adapt to the specific review):\n${templates.map((t, i) => `${i + 1}. [${t.tone}] ${t.name}: "${t.body}"`).join('\n')}`
+        : ''
+
     const tones = ['professional', 'friendly', 'brief'] as const
     const results: Record<string, string> = {}
 
@@ -92,7 +103,7 @@ export async function POST(request: NextRequest) {
           messages: [
             {
               role: 'system',
-              content: `You are a helpful assistant that writes responses to customer reviews for a local business. ${TONE_PROMPTS[tone]}`,
+              content: `You are a helpful assistant that writes responses to customer reviews for a local business. ${TONE_PROMPTS[tone]}${templateHints}`,
             },
             {
               role: 'user',
