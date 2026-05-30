@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { checkUsage, incrementUsage } from '@/lib/gate'
+import { checkRateLimit } from '@/lib/rate-limit'
 import OpenAI from 'openai'
 import { z } from 'zod'
 
@@ -65,6 +66,14 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const rateLimit = checkRateLimit(user.id, 10, 60_000)
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Max 10 requests per minute.' },
+        { status: 429 }
+      )
     }
 
     const body = await request.json()

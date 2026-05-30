@@ -167,3 +167,9 @@ Remaining:
 4. All forms: disable submit while loading, show spinner
 5. Toasts consistency
 Let me hit these.First, Zod validation. Let me check what Zod packages exist and add them to the key API routes.Let me check what API routes exist beyond what I've already seen.Let me check what Zod v4 looks like and see how the settings page uses it.Let me add Zod validation to the main API routes that accept user input — ai/respond, ai/sentiment, templates, and competitors.
+
+==================================================
+SESSION: 2026-05-30 21:51:41.244912
+==================================================
+Starting the startup sequence now.Build passed clean. Now checking TypeScript and identifying the first task.Let me check if there are more API routes I need to validate.TypeScript compiles clean — 0 errors. Build passes too. Now starting PHASE 7, Task 1: **Add Zod validation to ALL API routes**.
+Most API routes already have Zod (`ai/respond`, `ai/sentiment`). I need to add it to `competitors`, `competitors/snapshot`, `stripe/checkout`, and `templates`. The `businesses/list` is GET-only (no body), `cron/digest` has no user input, and `stripe/webhook` uses Stripe's own signature verification — those don't need it.Now update the POST handler to use Zod validation.Now add the schema and update the POST body parsing.Good, stripe/checkout looks correct. Now the templates route.All routes updated. Now let me verify the build passes.Let me check if there are other API routes for businesses or reviews that I might have missed.All API routes covered. Let me build now.Build passes clean. Let me commit this task and move on.Windows doesn't support heredoc. Let me use a different approach.Now update PLAN.md to mark this task done, then move to the next task: rate limiting.Now onto rate limiting. Let me create the rate limiter utility and integrate it into the AI respond route.
