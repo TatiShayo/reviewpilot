@@ -1,3 +1,3 @@
-done: Competitor monitoring — competitors table, API CRUD, snapshots, analytics dashboard page
+done: Weekly digest email — cron route at /api/cron/digest, Resend template, Vercel cron config
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>
