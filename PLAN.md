@@ -41,7 +41,7 @@
 - [x] Add proper error boundaries to every dashboard page (error.tsx files)
 - [x] Add loading.tsx skeleton screens to every dashboard route
 - [x] Fix any remaining TypeScript errors: npx tsc --noEmit must return 0 errors
-- [ ] npm run build must complete with zero errors and zero warnings
+- [x] npm run build must complete with zero errors and zero warnings
 - [ ] Add robots.txt and sitemap.xml (use next-sitemap package)
 - [ ] Add proper Open Graph meta tags to landing page (title, description, image)
 - [ ] All forms: disable submit button while loading, show spinner, re-enable on error
