@@ -15,6 +15,19 @@ function getStripe() {
   return stripeClient
 }
 
+const PLAN_CONFIG: Record<string, { name: string; description: string; amount: number }> = {
+  pro: {
+    name: 'ReviewPilot Pro',
+    description: 'Unlimited AI responses, multi-location management',
+    amount: 1500,
+  },
+  business: {
+    name: 'ReviewPilot Business',
+    description: 'Everything in Pro plus white-label & priority support',
+    amount: 2900,
+  },
+}
+
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe()
@@ -25,9 +38,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const body = await req.json()
+    const tier = (body.tier === 'business' ? 'business' : 'pro') as 'pro' | 'business'
+    const plan = PLAN_CONFIG[tier]
+
     const { data: sub } = await supabase
       .from('subscriptions')
-      .select('stripe_customer_id, stripe_subscription_id')
+      .select('stripe_customer_id, stripe_subscription_id, status')
       .eq('user_id', user.id)
       .maybeSingle()
 
@@ -47,10 +64,10 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    if (sub?.stripe_subscription_id) {
+    if (sub?.stripe_subscription_id && (sub.status === 'active' || sub.status === 'trialing')) {
       const session = await stripe.billingPortal.sessions.create({
         customer: customerId,
-        return_url: `${req.nextUrl.origin}/dashboard/settings`,
+        return_url: `${req.nextUrl.origin}/dashboard/billing`,
       })
       return NextResponse.json({ url: session.url })
     }
@@ -64,18 +81,18 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'ReviewPilot Pro',
-              description: 'Unlimited AI responses, multi-location management',
+              name: plan.name,
+              description: plan.description,
             },
-            unit_amount: 1500,
+            unit_amount: plan.amount,
             recurring: { interval: 'month' },
           },
           quantity: 1,
         },
       ],
-      success_url: `${req.nextUrl.origin}/dashboard/settings?checkout=success`,
-      cancel_url: `${req.nextUrl.origin}/dashboard/settings?checkout=cancelled`,
-      metadata: { user_id: user.id },
+      success_url: `${req.nextUrl.origin}/dashboard/billing?checkout=success`,
+      cancel_url: `${req.nextUrl.origin}/dashboard/billing?checkout=cancelled`,
+      metadata: { user_id: user.id, tier },
       allow_promotion_codes: true,
     })
 

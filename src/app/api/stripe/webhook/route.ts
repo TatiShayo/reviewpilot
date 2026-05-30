@@ -22,6 +22,22 @@ function getSupabaseAdmin() {
   )
 }
 
+async function setSubscriptionTier(userId: string, tier: string) {
+  const supabaseAdmin = getSupabaseAdmin()
+  await supabaseAdmin
+    .from('profiles')
+    .update({ subscription_tier: tier })
+    .eq('id', userId)
+}
+
+async function resetUsage(userId: string) {
+  const supabaseAdmin = getSupabaseAdmin()
+  await supabaseAdmin
+    .from('profiles')
+    .update({ responses_used_this_month: 0 })
+    .eq('id', userId)
+}
+
 export async function POST(req: NextRequest) {
   const stripe = getStripe()
   const supabaseAdmin = getSupabaseAdmin()
@@ -45,6 +61,7 @@ export async function POST(req: NextRequest) {
         const userId = session.metadata?.user_id
         const customerId = session.customer as string
         const subscriptionId = session.subscription as string
+        const tier = session.metadata?.tier || 'pro'
 
         if (userId && subscriptionId) {
           const sub = await stripe.subscriptions.retrieve(subscriptionId)
@@ -61,6 +78,9 @@ export async function POST(req: NextRequest) {
               current_period_end: new Date(subAny.current_period_end * 1000).toISOString(),
               cancel_at_period_end: sub.cancel_at_period_end,
             })
+
+          await setSubscriptionTier(userId, tier)
+          await resetUsage(userId)
         }
         break
       }
@@ -88,6 +108,12 @@ export async function POST(req: NextRequest) {
               cancel_at_period_end: sub.cancel_at_period_end,
             })
             .eq('stripe_customer_id', customerId)
+
+          if (sub.status === 'active' || sub.status === 'trialing') {
+            const amount = sub.items.data[0]?.price.unit_amount
+            const tier = amount === 2900 ? 'business' : 'pro'
+            await setSubscriptionTier(existing.user_id, tier)
+          }
         }
         break
       }
@@ -96,10 +122,36 @@ export async function POST(req: NextRequest) {
         const sub = event.data.object as Stripe.Subscription
         const customerId = sub.customer as string
 
-        await supabaseAdmin
+        const { data: existing } = await supabaseAdmin
           .from('subscriptions')
-          .update({ status: 'canceled', stripe_subscription_id: null })
+          .select('user_id')
           .eq('stripe_customer_id', customerId)
+          .maybeSingle()
+
+        if (existing) {
+          await supabaseAdmin
+            .from('subscriptions')
+            .update({ status: 'canceled', stripe_subscription_id: null })
+            .eq('stripe_customer_id', customerId)
+
+          await setSubscriptionTier(existing.user_id, 'free')
+        }
+        break
+      }
+
+      case 'invoice.paid': {
+        const invoice = event.data.object as Stripe.Invoice
+        const customerId = invoice.customer as string
+
+        const { data: sub } = await supabaseAdmin
+          .from('subscriptions')
+          .select('user_id')
+          .eq('stripe_customer_id', customerId)
+          .maybeSingle()
+
+        if (sub) {
+          await resetUsage(sub.user_id)
+        }
         break
       }
     }

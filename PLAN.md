@@ -19,11 +19,11 @@
 
 ## PHASE 3: SETTINGS & BILLING
 - [x] Business settings: custom response tone, signature, blacklisted words
-- [ ] Stripe subscription integration
-- [ ] Usage tracking (responses used this month)
+- [x] Stripe subscription integration
+- [x] Usage tracking (responses used this month)
 
 ## PHASE 4: TESTING & PERFORMANCE
-- [ ] Unit tests for AI response route
+- [x] Unit tests for AI response route
 - [ ] E2e: review card → generate → approve flow
 - [ ] Lighthouse ≥85
 

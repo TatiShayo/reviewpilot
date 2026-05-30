@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { checkUsage, incrementUsage } from '@/lib/gate'
 import OpenAI from 'openai'
 
 let openaiClient: OpenAI | null = null
@@ -47,6 +48,14 @@ export async function POST(request: NextRequest) {
 
     if (!review_text || !author) {
       return NextResponse.json({ error: 'Missing review_text or author' }, { status: 400 })
+    }
+
+    const usage = await checkUsage(user.id)
+    if (!usage.allowed) {
+      return NextResponse.json(
+        { error: `Usage limit reached. You've used ${usage.remaining === 0 ? 'all your' : ''} ${usage.remaining === 0 ? '50' : ''} free responses this month. Upgrade to Pro for unlimited.` },
+        { status: 429 }
+      )
     }
 
     let signature: string | null = null
@@ -100,26 +109,7 @@ export async function POST(request: NextRequest) {
       })
     )
 
-    const monthKey = new Date().toISOString().slice(0, 7) + '-01'
-
-    const { data: currentUsage } = await supabase
-      .from('usage')
-      .select('responses_used')
-      .eq('user_id', user.id)
-      .eq('month', monthKey)
-      .maybeSingle()
-
-    const newCount = (currentUsage?.responses_used || 0) + 1
-
-    await supabase
-      .from('usage')
-      .upsert({
-        user_id: user.id,
-        month: monthKey,
-        responses_used: newCount,
-      }, {
-        onConflict: 'user_id,month',
-      })
+    await incrementUsage(user.id)
 
     return NextResponse.json({ responses: results })
   } catch (error) {
