@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "ReviewPilot — Respond to every review in one click",
   description:
     "AI-powered review responses for Google My Business. Sound human every time.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://reviewpilot.app"),
   robots: { index: true, follow: true },
   openGraph: {
     title: "ReviewPilot — Respond to every review in one click",
@@ -25,12 +26,21 @@ export const metadata: Metadata = {
       "AI-powered review responses for Google My Business. Sound human every time.",
     type: "website",
     siteName: "ReviewPilot",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "ReviewPilot — AI-powered review responses",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ReviewPilot — Respond to every review in one click",
     description:
       "AI-powered review responses for Google My Business. Sound human every time.",
+    images: ["/og-image.png"],
   },
 };
 
