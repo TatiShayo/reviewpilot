@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { z } from 'zod'
+
+const templatePostSchema = z.object({
+  name: z.string().min(1),
+  tone: z.enum(['professional', 'friendly', 'brief']),
+  body: z.string().min(1),
+})
 
 export async function GET() {
   const supabase = await createClient()
@@ -22,11 +29,11 @@ export async function POST(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { name, tone, body: templateBody } = body
-
-  if (!name || !tone || !templateBody) {
-    return NextResponse.json({ error: 'Missing name, tone, or body' }, { status: 400 })
+  const parsed = templatePostSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 })
   }
+  const { name, tone, body: templateBody } = parsed.data
 
   const { data, error } = await supabase
     .from('response_templates')

@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import OpenAI from 'openai'
+import { z } from 'zod'
+
+const sentimentSchema = z.object({
+  review_text: z.string().min(1),
+})
 
 let openaiClient: OpenAI | null = null
 
@@ -21,11 +26,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { review_text } = body
-
-    if (!review_text || typeof review_text !== 'string') {
-      return NextResponse.json({ error: 'Missing review_text' }, { status: 400 })
+    const parsed = sentimentSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 })
     }
+    const { review_text } = parsed.data
 
     const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',

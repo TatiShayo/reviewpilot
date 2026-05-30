@@ -32,7 +32,7 @@
     32|- [x] Response templates library: user-defined templates AI can use as style reference
     33|- [x] Competitor monitoring: track competitor's review ratings over time
     34|- [x] Weekly digest email: "You received X reviews this week, response rate: Y%"
-    35|- [ ] Multi-language: detect review language, respond in same language
+    35|- [x] Multi-language: detect review language, respond in same language
     36|
 
 ## PHASE 7: PRODUCTION HARDENING

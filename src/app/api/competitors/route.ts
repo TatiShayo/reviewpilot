@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { z } from 'zod'
+
+const competitorPostSchema = z.object({
+  name: z.string().min(1),
+  business_id: z.string().uuid().nullable().optional(),
+  gmb_handle: z.string().nullable().optional(),
+  rating: z.number().min(0).max(5).optional(),
+  total_reviews: z.number().int().min(0).optional(),
+})
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient()
@@ -45,11 +54,11 @@ export async function POST(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { name, business_id, gmb_handle, rating, total_reviews } = body
-
-  if (!name) {
-    return NextResponse.json({ error: 'Missing name' }, { status: 400 })
+  const parsed = competitorPostSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 })
   }
+  const { name, business_id, gmb_handle, rating, total_reviews } = parsed.data
 
   const { data, error } = await supabase
     .from('competitors')

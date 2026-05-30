@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@/lib/supabase/server'
+import { z } from 'zod'
 
 let stripeClient: Stripe | null = null
 
@@ -28,6 +29,10 @@ const PLAN_CONFIG: Record<string, { name: string; description: string; amount: n
   },
 }
 
+const checkoutSchema = z.object({
+  tier: z.enum(['pro', 'business']),
+})
+
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe()
@@ -39,7 +44,11 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const tier = (body.tier === 'business' ? 'business' : 'pro') as 'pro' | 'business'
+    const parsed = checkoutSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 })
+    }
+    const tier = parsed.data.tier
     const plan = PLAN_CONFIG[tier]
 
     const { data: sub } = await supabase

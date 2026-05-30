@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { checkUsage, incrementUsage } from '@/lib/gate'
 import OpenAI from 'openai'
+import { z } from 'zod'
+
+const respondSchema = z.object({
+  review_text: z.string().min(1),
+  author: z.string().min(1),
+  rating: z.number().int().min(1).max(5).optional(),
+  business_name: z.string().optional(),
+  business_id: z.string().uuid().optional(),
+})
 
 let openaiClient: OpenAI | null = null
 
@@ -16,6 +25,21 @@ const TONE_PROMPTS: Record<string, string> = {
   professional: 'Write a professional, courteous response that thanks the reviewer, addresses their specific points, and reflects well on the business. Do not include placeholders like [Name]. Sign as "The Team".',
   friendly: 'Write a warm, friendly, and personable response. Use casual but respectful language. Make the reviewer feel heard and appreciated. Do not include placeholders. Sign with a smiley emoji.',
   brief: 'Write a short, concise response in 1-2 sentences. Be polite and thankful but get straight to the point. Do not include placeholders.',
+}
+
+const LANG_PATTERNS: [RegExp, string][] = [
+  [/[àâäéèêëîïôöùûüçœ]/i, 'French'],
+  [/[áéíóúüñ¿¡]/i, 'Spanish'],
+  [/[ãõâêôçáéíóúà]/i, 'Portuguese'],
+  [/[äöüß]/i, 'German'],
+  [/[àèéìòù]/i, 'Italian'],
+]
+
+function detectLanguage(text: string): string {
+  for (const [pattern, lang] of LANG_PATTERNS) {
+    if (pattern.test(text)) return lang
+  }
+  return 'English'
 }
 
 function applySignature(text: string, signature: string | null): string {
@@ -44,11 +68,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { review_text, author, rating, business_name, business_id } = body
-
-    if (!review_text || !author) {
-      return NextResponse.json({ error: 'Missing review_text or author' }, { status: 400 })
+    const parsed = respondSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 })
     }
+    const { review_text, author, rating, business_name, business_id } = parsed.data
 
     const usage = await checkUsage(user.id)
     if (!usage.allowed) {
@@ -75,6 +99,9 @@ export async function POST(request: NextRequest) {
     }
 
     const reviewContext = `Review by ${author}: ${rating ? `${rating}/5 stars. ` : ''}"${review_text}"${business_name ? ` — for ${business_name}` : ''}`
+    const detectedLang = detectLanguage(review_text)
+    const langInstruction = detectedLang !== 'English' ? ` Write your response in ${detectedLang} since the review is in ${detectedLang}.` : ''
+
     if (blacklistedWords.length > 0) {
       const bl = blacklistedWords.join(', ')
       TONE_PROMPTS.professional += ` IMPORTANT: Do NOT use any of these words/phrases: ${bl}.`
@@ -103,7 +130,7 @@ export async function POST(request: NextRequest) {
           messages: [
             {
               role: 'system',
-              content: `You are a helpful assistant that writes responses to customer reviews for a local business. ${TONE_PROMPTS[tone]}${templateHints}`,
+              content: `You are a helpful assistant that writes responses to customer reviews for a local business. ${TONE_PROMPTS[tone]}${langInstruction}${templateHints}`,
             },
             {
               role: 'user',
