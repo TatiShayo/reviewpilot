@@ -28,7 +28,7 @@
 - [ ] Lighthouse ≥85
 
 ## PHASE 5: ADVANCED
-- [ ] Sentiment analysis: tag reviews as positive/negative/neutral, filter by sentiment
+- [x] Sentiment analysis: tag reviews as positive/negative/neutral, filter by sentiment
 - [ ] Response templates library: user-defined templates AI can use as style reference
 - [ ] Competitor monitoring: track competitor's review ratings over time
 - [ ] Weekly digest email: "You received X reviews this week, response rate: Y%"

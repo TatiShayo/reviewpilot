@@ -49,3 +49,6 @@
 [2026-05-30 11:57:56.732846] Session #1: 11 tasks left
 
 [2026-05-30] Task 1 done: Settings page at /dashboard/settings — Profile, Response Defaults, Notifications tabs with form saves to profiles table. Migration 002 added profile columns.
+[2026-05-30] Task 2 done: Unit tests for AI response route (5 tests, all passing). Also audited PLAN.md — Stripe & usage tracking already built, now marked done (16 done).
+
+[2026-05-30 13:03:54.799372] Session #1: 7 tasks left
