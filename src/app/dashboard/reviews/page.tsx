@@ -241,7 +241,7 @@ function ReviewCard({ review }: { review: ReviewData }) {
             variant="outline"
             size="sm"
             onClick={handleGenerate}
-            disabled={generating}
+            loading={generating}
             className="shrink-0"
           >
             {generating ? 'Generating...' : 'Generate Response'}
@@ -282,7 +282,7 @@ function ReviewCard({ review }: { review: ReviewData }) {
             {responses[selectedTone]}
           </p>
           <div className="flex items-center gap-2 mt-3">
-            <Button size="sm" onClick={handleApprove} disabled={approving}>
+            <Button size="sm" onClick={handleApprove} loading={approving}>
               {approving ? 'Approving...' : 'Approve'}
             </Button>
             <Button size="sm" variant="outline" onClick={() => { setSelectedTone(null); setResponses(null) }}>
@@ -308,7 +308,7 @@ function ReviewCard({ review }: { review: ReviewData }) {
               size="sm"
               className="mt-3"
               onClick={handlePostToGoogle}
-              disabled={posting}
+              loading={posting}
             >
               <ExternalLink className="h-3.5 w-3.5" />
               {posting ? 'Posting...' : 'Post to Google'}

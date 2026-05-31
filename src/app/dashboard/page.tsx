@@ -88,9 +88,11 @@ export default async function DashboardPage() {
                     {review.sentiment}
                   </span>
                   {!review.response && (
-                    <Button variant="outline" size="sm">
-                      Generate Response
-                    </Button>
+                    <a href="/dashboard/reviews">
+                      <Button variant="outline" size="sm">
+                        Generate Response
+                      </Button>
+                    </a>
                   )}
                 </div>
               </div>

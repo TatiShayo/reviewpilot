@@ -33,6 +33,9 @@ export default function AnalyticsPage() {
   const [competitors, setCompetitors] = useState<Competitor[]>([])
   const [businesses, setBusinesses] = useState<Business[]>([])
   const [loading, setLoading] = useState(true)
+  const [adding, setAdding] = useState(false)
+  const [snapshotId, setSnapshotId] = useState<string | null>(null)
+  const [removingId, setRemovingId] = useState<string | null>(null)
   const [name, setName] = useState('')
   const [businessId, setBusinessId] = useState('')
   const [gmbHandle, setGmbHandle] = useState('')
@@ -58,42 +61,52 @@ export default function AnalyticsPage() {
 
   async function addCompetitor() {
     if (!name.trim()) return
+    setAdding(true)
 
-    const res = await fetch('/api/competitors', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: name.trim(),
-        business_id: businessId || null,
-        gmb_handle: gmbHandle.trim() || null,
-        rating: parseFloat(rating) || 0,
-        total_reviews: parseInt(totalReviews) || 0,
-      }),
-    })
+    try {
+      const res = await fetch('/api/competitors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          business_id: businessId || null,
+          gmb_handle: gmbHandle.trim() || null,
+          rating: parseFloat(rating) || 0,
+          total_reviews: parseInt(totalReviews) || 0,
+        }),
+      })
 
-    if (!res.ok) {
-      toast.error('Failed to add competitor')
-      return
+      if (!res.ok) {
+        toast.error('Failed to add competitor')
+        return
+      }
+
+      const data = await res.json()
+      setCompetitors((prev) => [...prev, { ...data.competitor, snapshots: [] }])
+      setName('')
+      setBusinessId('')
+      setGmbHandle('')
+      setRating('')
+      setTotalReviews('')
+      toast.success('Competitor added')
+    } finally {
+      setAdding(false)
     }
-
-    const data = await res.json()
-    setCompetitors((prev) => [...prev, { ...data.competitor, snapshots: [] }])
-    setName('')
-    setBusinessId('')
-    setGmbHandle('')
-    setRating('')
-    setTotalReviews('')
-    toast.success('Competitor added')
   }
 
   async function deleteCompetitor(id: string) {
-    const res = await fetch(`/api/competitors?id=${id}`, { method: 'DELETE' })
-    if (!res.ok) {
-      toast.error('Failed to delete competitor')
-      return
+    setRemovingId(id)
+    try {
+      const res = await fetch(`/api/competitors?id=${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        toast.error('Failed to delete competitor')
+        return
+      }
+      setCompetitors((prev) => prev.filter((c) => c.id !== id))
+      toast.success('Competitor removed')
+    } finally {
+      setRemovingId(null)
     }
-    setCompetitors((prev) => prev.filter((c) => c.id !== id))
-    toast.success('Competitor removed')
   }
 
   async function addSnapshot(competitorId: string) {
@@ -101,35 +114,40 @@ export default function AnalyticsPage() {
     const tr = prompt('Enter total reviews count:')
     if (!r) return
 
-    const res = await fetch('/api/competitors/snapshot', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        competitor_id: competitorId,
-        rating: parseFloat(r),
-        total_reviews: parseInt(tr || '0'),
-      }),
-    })
+    setSnapshotId(competitorId)
+    try {
+      const res = await fetch('/api/competitors/snapshot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          competitor_id: competitorId,
+          rating: parseFloat(r),
+          total_reviews: parseInt(tr || '0'),
+        }),
+      })
 
-    if (!res.ok) {
-      toast.error('Failed to add snapshot')
-      return
-    }
+      if (!res.ok) {
+        toast.error('Failed to add snapshot')
+        return
+      }
 
-    const data = await res.json()
-    setCompetitors((prev) =>
-      prev.map((c) =>
-        c.id === competitorId
-          ? {
-              ...c,
-              rating: parseFloat(r),
-              total_reviews: parseInt(tr || '0'),
-              snapshots: [...c.snapshots, data.snapshot],
-            }
-          : c
+      const data = await res.json()
+      setCompetitors((prev) =>
+        prev.map((c) =>
+          c.id === competitorId
+            ? {
+                ...c,
+                rating: parseFloat(r),
+                total_reviews: parseInt(tr || '0'),
+                snapshots: [...c.snapshots, data.snapshot],
+              }
+            : c
+        )
       )
-    )
-    toast.success('Snapshot recorded')
+      toast.success('Snapshot recorded')
+    } finally {
+      setSnapshotId(null)
+    }
   }
 
   function getTrend(snapshots: Snapshot[]): 'up' | 'down' | 'flat' {
@@ -206,7 +224,7 @@ export default function AnalyticsPage() {
             value={totalReviews}
             onChange={(e) => setTotalReviews(e.target.value)}
           />
-          <Button onClick={addCompetitor} className="self-end">
+          <Button onClick={addCompetitor} loading={adding} className="self-end">
             <Plus className="h-4 w-4 mr-1" />
             Add Competitor
           </Button>
@@ -271,7 +289,7 @@ export default function AnalyticsPage() {
                   )}
 
                   <div className="mt-3 flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => addSnapshot(c.id)}>
+                    <Button variant="outline" size="sm" onClick={() => addSnapshot(c.id)} loading={snapshotId === c.id}>
                       <Plus className="h-3 w-3 mr-1" />
                       Add Snapshot
                     </Button>
@@ -279,6 +297,7 @@ export default function AnalyticsPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => deleteCompetitor(c.id)}
+                      loading={removingId === c.id}
                     >
                       <Trash2 className="h-3 w-3 mr-1" />
                       Remove

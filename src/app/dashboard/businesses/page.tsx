@@ -251,7 +251,7 @@ export default function BusinessesPage() {
                   <Label htmlFor="website">Website</Label>
                   <Input id="website" placeholder="https://example.com" {...register('website')} />
                 </div>
-                <Button type="submit" disabled={saving} className="w-full mt-2">
+                <Button type="submit" loading={saving} className="w-full mt-2">
                   {saving ? 'Saving...' : editingBusiness ? 'Update Business' : 'Add Business'}
                 </Button>
               </form>

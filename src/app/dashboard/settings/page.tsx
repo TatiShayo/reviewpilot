@@ -327,7 +327,7 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <Button type="submit" disabled={savingProfile}>
+                <Button type="submit" loading={savingProfile}>
                   {savingProfile ? 'Saving...' : 'Save Profile'}
                 </Button>
               </form>
@@ -419,7 +419,7 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <Button type="submit" disabled={savingDefaults}>
+                <Button type="submit" loading={savingDefaults}>
                   {savingDefaults ? 'Saving...' : 'Save Defaults'}
                 </Button>
               </form>
@@ -479,10 +479,94 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <Button type="submit" disabled={savingNotifications}>
+                <Button type="submit" loading={savingNotifications}>
                   {savingNotifications ? 'Saving...' : 'Save Notifications'}
                 </Button>
               </form>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <Card>
+            <CardHeader>
+              <CardTitle>Response Templates</CardTitle>
+              <CardDescription>
+                Create reusable templates that the AI uses as style references.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-3 border-b pb-6">
+                <div className="space-y-2">
+                  <Label htmlFor="templateName">Template name</Label>
+                  <Input
+                    id="templateName"
+                    placeholder="e.g. Apology for bad service"
+                    value={templateName}
+                    onChange={(e) => setTemplateName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tone</Label>
+                  <Select value={templateTone} onValueChange={(v) => setTemplateTone(v || "")}>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TONES.map((t) => (
+                        <SelectItem key={t.value} value={t.value}>
+                          {t.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="templateBody">Template body</Label>
+                  <Textarea
+                    id="templateBody"
+                    placeholder="Write the template text that the AI will use as a reference..."
+                    value={templateBody}
+                    onChange={(e) => setTemplateBody(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+                <Button onClick={handleCreateTemplate} loading={savingTemplate}>
+                  {savingTemplate ? 'Creating...' : 'Create Template'}
+                </Button>
+              </div>
+
+              {templates.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No templates yet. Create one to give the AI a consistent style.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {templates.map((t) => (
+                    <div key={t.id} className="flex items-start justify-between gap-4 rounded-lg border p-3">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm">{t.name}</span>
+                          <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                            {t.tone}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                          {t.body}
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteTemplate(t.id)}
+                        className="text-destructive shrink-0"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

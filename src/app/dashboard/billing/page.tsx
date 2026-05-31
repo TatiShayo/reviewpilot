@@ -169,7 +169,7 @@ export default function BillingPage() {
           </div>
 
           {isActive && (
-            <Button variant="outline" onClick={handlePortal} disabled={portalLoading}>
+            <Button variant="outline" onClick={handlePortal} loading={portalLoading}>
               {portalLoading ? 'Loading...' : 'Manage Subscription'}
             </Button>
           )}
@@ -197,7 +197,7 @@ export default function BillingPage() {
               <Button
                 className="w-full"
                 onClick={() => handleCheckout('pro')}
-                disabled={checkoutLoading === 'pro'}
+                loading={checkoutLoading === 'pro'}
               >
                 {checkoutLoading === 'pro' ? 'Redirecting...' : 'Upgrade to Pro'}
               </Button>
@@ -224,7 +224,7 @@ export default function BillingPage() {
                 variant="outline"
                 className="w-full"
                 onClick={() => handleCheckout('business')}
-                disabled={checkoutLoading === 'business'}
+                loading={checkoutLoading === 'business'}
               >
                 {checkoutLoading === 'business' ? 'Redirecting...' : 'Upgrade to Business'}
               </Button>

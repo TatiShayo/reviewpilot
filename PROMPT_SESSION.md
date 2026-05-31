@@ -1,15 +1,15 @@
 You are a senior fullstack engineer. Continue building reviewpilot autonomously.
 
 SESSION STATE:
-Tasks remaining: 75
-Tasks completed: 25
-Current phase: PHASE 7: PRODUCTION HARDENING
+Tasks remaining: 128
+Tasks completed: 32
+Current phase: 38|## PHASE 7: PRODUCTION HARDENING
 Recent commits:
-bdbff7c done: Add Zod validation to all API routes (competitors, snapshot, checkout, templates)
-e8b6899 done: Weekly digest email — cron route at /api/cron/digest, Resend template, Vercel cron config
-c5108e7 done: Competitor monitoring — competitors table, API CRUD, snapshots, analytics dashboard page
-c48214a done: Response templates library — AI respond route now fetches user templates and uses them as style references
-122e73e done: Lighthouse >=85 — next.config optimization, removed unused deps, loading/error/not-found boundaries, OG metadata, Nav CLS fix
+9b78d19 done: Add metadataBase + OG image tags to root layout
+2048a5b done: Add robots.txt and sitemap.xml with next-sitemap
+7743910 done: Fix build warnings, add turbopack.root config, loading & error boundaries already exist
+4e6706f done: Add error boundaries to every dashboard page
+caf0b8e done: Add rate limiting to AI respond route — max 10 calls/minute per user
 
 KNOWN ISSUES FROM PREVIOUS SESSIONS:
 # ReviewPilot Learnings & Known Issues
@@ -120,5 +120,5 @@ Search the web if stuck on an error.
 
 Build exactly to the PRODUCT SPECIFICATION above. Every page, feature, and design detail must match.
 
-You have 75 tasks remaining. Complete as many as possible before context runs out.
+You have 128 tasks remaining. Complete as many as possible before context runs out.
 Start now. First task. Go.

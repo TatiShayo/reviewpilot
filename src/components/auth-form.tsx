@@ -108,7 +108,7 @@ function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
               <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
           </div>
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button type="submit" loading={loading} className="w-full">
             {loading
               ? 'Please wait...'
               : mode === 'login'

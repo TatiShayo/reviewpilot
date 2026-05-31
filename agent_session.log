@@ -173,3 +173,3013 @@ SESSION: 2026-05-30 21:51:41.244912
 ==================================================
 Starting the startup sequence now.Build passed clean. Now checking TypeScript and identifying the first task.Let me check if there are more API routes I need to validate.TypeScript compiles clean — 0 errors. Build passes too. Now starting PHASE 7, Task 1: **Add Zod validation to ALL API routes**.
 Most API routes already have Zod (`ai/respond`, `ai/sentiment`). I need to add it to `competitors`, `competitors/snapshot`, `stripe/checkout`, and `templates`. The `businesses/list` is GET-only (no body), `cron/digest` has no user input, and `stripe/webhook` uses Stripe's own signature verification — those don't need it.Now update the POST handler to use Zod validation.Now add the schema and update the POST body parsing.Good, stripe/checkout looks correct. Now the templates route.All routes updated. Now let me verify the build passes.Let me check if there are other API routes for businesses or reviews that I might have missed.All API routes covered. Let me build now.Build passes clean. Let me commit this task and move on.Windows doesn't support heredoc. Let me use a different approach.Now update PLAN.md to mark this task done, then move to the next task: rate limiting.Now onto rate limiting. Let me create the rate limiter utility and integrate it into the AI respond route.
+
+==================================================
+SESSION: 2026-05-30 21:57:53.781733
+==================================================
+
+==================================================
+SESSION: 2026-05-30 22:23:13.728243
+==================================================
+
+==================================================
+SESSION: 2026-05-30 22:27:44.039932
+==================================================
+I'm going to execute the startup sequence and then work through the PLAN.md tasks autonomously. Let me start by gathering all the state I need in parallel.The build timed out during TypeScript checking. Let me find all forms and the current state of things in parallel.Now let me examine the form files closely to check what's missing.TypeScript is clean. Let me check the Button component and what's missing for forms/toasts.Let me check the settings page templates section and the auth pages to verify all forms have proper loading state.Let me check the settings page more carefully - I notice there's a "templates" tab referenced but I need to verify it's fully implemented.Now I can see the full picture. Let me analyze what's actually missing vs already done.
+**Forms** — Already good. All submit buttons use `loading` prop (disables + spinner). All error handlers reset loading via `finally`.
+**Toasts** — Already consistent. Only `toast.success` and `toast.error` are used everywhere. No info/warning/custom toasts.
+**What's actually broken/missing:**
+1. Settings page has a "Templates" tab trigger but **no TabsContent** — the template CRUD functions exist but aren't rendered
+2. The `Toaster` component has no `richColors` prop for proper sonner styling
+3. Dashboard "Generate Response" button has no action handler
+Let me fix these.Now I'll fix the three issues. First, the missing Templates tab content in settings.Now let me add `richColors` to the sonner Toaster for proper success=green, error=red styling, and fix the dashboard button.Now let me run the build to verify everything compiles.Simple type mismatch. Let me fix
+
+==================================================
+SESSION: 2026-05-30 22:36:39.886976
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:45:02.786121
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:45:58.832097
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:46:51.700628
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:47:44.028904
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:48:36.823316
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:49:32.420893
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:50:25.703052
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:51:18.127025
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:52:10.095722
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:53:02.638768
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:53:54.581929
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:54:47.033916
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:55:39.086420
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:56:31.700924
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:57:23.693414
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:58:15.934112
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:59:07.544702
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 22:59:59.750288
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:00:55.127679
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:01:48.946402
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:02:42.655487
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:03:35.850259
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:04:29.127158
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:05:22.370425
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:06:15.387913
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:07:08.966867
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:08:02.945077
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:08:56.512728
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:09:49.842935
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:10:43.191805
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:11:36.201075
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:12:28.199421
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:13:23.395470
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:14:15.195622
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:15:07.615216
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:15:59.139901
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:16:51.009742
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:17:42.401098
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:18:33.666019
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:19:24.963889
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:20:16.566446
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:21:08.996211
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:22:00.440658
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:22:51.822590
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:23:43.186196
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:24:35.084252
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:25:28.885023
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:26:24.446992
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:27:18.269699
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:28:12.435457
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:29:07.570338
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:30:03.786491
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:30:59.999108
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:31:55.322409
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:32:50.117454
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:33:45.105430
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:34:41.298912
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:35:38.517531
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:36:34.784948
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:37:32.129603
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:38:28.859812
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:39:24.495280
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:40:20.180997
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:41:14.647481
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:42:09.573400
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:43:04.596708
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:43:59.186255
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:44:53.742745
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:45:48.184299
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:46:42.738526
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:47:37.240617
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:48:32.036664
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:49:26.435956
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:50:21.247427
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:51:15.806201
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:52:11.282109
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:53:06.565935
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:54:02.368783
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:54:58.588846
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:55:54.127292
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:56:52.157449
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:57:48.109350
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:58:42.726701
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-30 23:59:37.880120
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:00:33.652699
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:01:28.090665
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:02:22.457651
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:03:15.089034
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:04:07.675247
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:05:00.547990
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:05:54.432228
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:06:47.169181
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:07:40.247675
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:08:33.260449
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:09:27.138513
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:10:21.116104
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:11:14.386833
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:12:08.136096
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:13:01.670668
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:13:55.866657
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:14:49.420927
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:15:43.543633
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:16:36.854005
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:17:30.114996
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:18:24.053545
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:19:18.433436
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:20:12.332146
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:21:05.029959
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:21:57.757401
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:22:51.738653
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:23:47.930577
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:24:46.018038
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:25:41.429455
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:26:38.402674
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:27:33.173032
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:28:26.845280
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:29:20.889386
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:30:15.627116
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:31:10.242476
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:32:04.751215
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:32:59.009973
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:33:53.286501
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:34:48.121755
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:35:43.748403
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:36:38.587122
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:37:34.106356
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:38:28.446494
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:39:22.269057
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:40:16.282325
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:41:10.138041
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:42:04.968343
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:43:00.790514
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:44:02.595200
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:44:56.332949
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:45:49.427745
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:46:42.064020
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:47:35.535118
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:48:30.584794
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:49:24.667898
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:50:19.220709
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:51:14.750395
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:52:12.468617
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:53:13.947925
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:54:23.764936
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 00:55:41.278804
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:23:35.530680
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:24:27.132216
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:25:18.178323
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:26:09.636142
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:27:01.431686
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:27:58.707642
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:28:54.435943
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:29:45.701766
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:30:36.894150
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:31:28.300576
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:32:20.416856
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:33:11.590811
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:34:03.163451
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:34:54.211290
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:35:45.395747
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:36:36.639985
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:37:27.644431
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:38:19.076815
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:39:11.044267
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:40:04.522249
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:40:59.594224
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:41:54.569785
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:42:49.856426
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:43:45.481929
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:44:42.118028
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:45:38.060866
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:46:34.801142
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:47:31.750409
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:48:28.475372
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:49:24.412492
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:50:20.164925
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:51:16.091794
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:52:12.419373
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:53:09.920377
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:54:05.972324
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:55:01.777974
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:55:58.984890
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:56:54.261584
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:57:48.924616
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:58:43.010978
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 01:59:38.555472
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:00:33.744060
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:01:28.701329
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:02:23.603795
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:03:18.138617
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:04:12.733651
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:05:08.991639
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:06:04.416841
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:06:59.021603
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:07:53.428668
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:08:48.632051
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:09:45.095052
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:10:40.887250
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:11:37.257623
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:12:31.689722
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:13:26.392111
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:14:20.933442
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:15:15.756929
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:16:09.642805
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:17:04.547997
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:17:58.953089
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:18:52.368854
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:19:46.093706
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:20:40.996777
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:21:35.584745
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:22:30.233353
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:23:24.530224
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:24:18.805011
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:25:13.836177
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:26:08.282149
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:27:02.049458
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:27:55.877507
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:28:49.355408
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:29:42.466078
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:30:34.919951
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:31:26.471944
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:32:17.727450
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:33:08.792939
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:34:00.032798
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:34:51.178938
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:35:42.798844
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:36:33.973248
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:37:25.479510
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:38:17.034141
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:39:08.150459
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:39:59.966627
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:40:51.210208
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:41:42.675213
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:42:33.903436
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:43:25.000318
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:44:16.657004
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:45:08.185674
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:46:01.277102
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:46:55.235700
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:47:49.684639
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:48:44.374571
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:49:38.194330
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:50:32.506448
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:51:26.563896
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:52:22.188786
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:53:16.203666
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:54:10.365617
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:55:04.801992
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:56:02.427524
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:56:57.922785
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:57:51.313869
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:58:45.023605
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 02:59:38.894569
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:00:31.488118
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:01:24.263449
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:02:16.301204
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:03:08.308668
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:04:00.748515
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:04:52.987159
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:05:45.643979
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:06:38.866963
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:07:31.618847
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:08:24.594916
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:09:16.932225
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:10:09.250222
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:11:02.364435
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:11:56.687005
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:12:50.088412
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:13:42.911233
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:14:35.501074
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:15:28.364689
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:16:21.639152
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:17:15.940826
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:18:08.691452
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:19:01.385197
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:19:54.253466
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:20:46.787499
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:21:39.802524
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:22:33.154940
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:23:26.003478
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:24:18.767800
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:25:13.000027
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:26:06.397186
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:27:00.775185
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:27:54.626174
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:28:48.184538
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:29:40.934018
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:30:33.375433
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:31:26.799230
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:32:19.434642
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:33:12.273508
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:34:05.199539
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:34:58.119149
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:35:51.306396
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:36:44.704705
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:37:38.195060
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:38:31.302205
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:39:24.440668
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:40:17.081286
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:41:10.861613
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:42:05.468423
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:43:00.395412
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:43:55.423755
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:44:51.141199
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:45:46.970953
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:46:43.057581
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:47:38.152003
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:48:33.149129
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:49:27.599883
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:50:21.634338
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:51:16.900368
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:52:11.843487
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:53:06.919822
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:54:01.727687
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:54:56.367088
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:55:51.920879
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:56:48.275903
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:57:43.016749
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:58:37.296139
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 03:59:32.013401
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:00:26.069881
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:01:20.385695
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:02:15.716223
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:03:09.363501
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:04:03.652948
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:04:56.892287
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:05:50.763002
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:06:46.949068
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:07:42.303116
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:08:36.783473
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:09:30.525648
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:10:24.463585
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:11:19.762424
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:12:14.409758
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:13:09.567318
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:14:03.994522
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:14:58.071710
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:15:52.172873
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:16:46.231779
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:17:40.196126
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:18:35.037708
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:19:29.596621
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:20:24.225232
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:21:18.193955
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:22:12.887608
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:23:07.580407
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:24:01.655191
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:24:56.842202
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:25:55.931562
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:26:51.628872
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:27:47.092401
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:28:42.580847
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:29:37.088035
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:30:31.572517
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:31:24.132646
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:32:16.631491
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:33:09.471699
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:34:02.563681
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:34:54.876026
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:35:48.486986
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:36:41.161708
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:37:34.556869
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:38:27.088121
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:39:20.087589
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:40:13.499955
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:41:06.517795
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:41:59.369571
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:42:53.124237
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:43:45.866562
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:44:39.125960
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:45:31.934893
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:46:24.238130
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:47:16.722398
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:48:09.963604
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:49:02.706856
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:49:56.436700
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:50:50.457215
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:51:43.901111
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:52:38.933938
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:53:34.245268
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:54:35.214810
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:55:27.103169
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:56:18.960120
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:57:11.526758
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:58:04.917436
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:59:00.196396
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 04:59:54.790598
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:00:49.726977
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:01:45.855918
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:02:38.617399
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:03:32.661999
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:04:26.770289
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:05:23.667730
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:06:16.315372
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:07:13.922108
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:08:08.894989
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:09:04.129417
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:09:59.162509
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:10:52.304529
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:11:45.034905
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:12:36.674339
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:13:27.772404
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:14:19.977388
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:15:14.292262
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:16:07.183706
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:17:00.264746
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:17:52.833787
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:18:47.808998
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:19:43.130518
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:20:36.957539
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:21:29.488438
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:22:21.943537
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:23:14.149234
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:24:07.081132
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:25:01.502130
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:25:54.408135
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:26:47.906942
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:27:39.843013
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:28:32.790767
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:29:26.401901
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:30:19.834980
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:31:14.386902
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:32:08.492300
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:33:05.631554
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:34:00.736099
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:34:58.831124
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:35:55.694858
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:36:50.615127
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:37:47.638843
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:38:46.402361
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:39:39.601500
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:40:34.426432
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:41:30.029916
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:42:24.412876
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:43:17.771809
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:44:12.124038
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:45:07.430323
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:46:04.522793
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:46:58.500123
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:47:53.386492
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:48:47.858755
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:49:42.949121
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:50:36.784146
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:51:31.009014
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:52:26.082128
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:53:21.249519
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:54:14.726994
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:55:08.790037
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:56:02.882868
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:56:59.608393
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:57:57.156795
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:58:55.669711
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 05:59:50.568654
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:00:44.072218
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:01:35.072010
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:02:26.445501
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:03:17.664384
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:04:08.634621
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:04:59.428574
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:05:50.367764
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:06:42.906521
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:07:33.842065
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:08:26.457273
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:09:17.503267
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:10:09.210554
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:11:03.318555
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:11:58.181562
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:12:56.311354
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:13:52.092969
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:14:43.324311
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:15:35.864164
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:16:28.197208
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:17:21.454957
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:18:14.845373
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:19:17.422640
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:20:13.194298
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:21:05.762487
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:21:58.265147
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:22:50.625177
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:23:42.791937
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:24:35.047720
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:25:27.664075
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:26:25.025223
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:27:18.163315
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:28:13.357292
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:29:04.209301
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:29:55.344968
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:30:47.930330
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:31:39.872132
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:32:30.813422
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:33:22.118655
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:34:14.068477
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:35:05.947723
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:36:00.684497
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:36:55.038537
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:37:50.509131
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:38:46.541543
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:39:41.683156
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:40:36.469554
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:41:32.319738
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:42:25.845623
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:43:19.646449
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:44:16.405602
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:45:08.166238
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:46:00.753582
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:46:54.667969
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:47:47.297275
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:48:40.814514
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:49:34.208488
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:50:27.589609
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:51:23.060630
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:52:14.303784
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:53:09.641007
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:54:00.927450
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:54:52.789677
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:55:45.134572
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:56:38.421534
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:57:29.664935
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:58:20.339302
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 06:59:13.029300
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:00:04.888080
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:00:56.184986
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:01:53.321867
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:02:44.268876
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:03:35.701591
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:04:28.092764
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:05:19.863698
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:06:11.661396
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:07:02.812591
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:07:53.626574
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:08:44.551947
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:09:35.489612
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:10:26.404990
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:11:17.773923
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:12:09.810750
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:13:01.830661
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:13:54.503741
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:14:48.341485
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:15:43.362960
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:16:37.147386
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:17:28.706208
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:18:21.225335
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:19:13.559591
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:20:06.097725
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:21:02.050879
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:21:55.502932
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:22:49.037551
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:23:42.904143
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:24:36.210510
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:25:33.980380
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:26:29.423556
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:27:28.416089
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:28:22.644618
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:29:14.073412
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:30:07.360368
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:30:59.429108
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:31:52.789618
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:32:43.742949
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:33:36.188664
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:34:30.385738
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:35:24.698850
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:36:19.454909
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:37:15.203337
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:38:08.146173
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:39:00.772284
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:39:55.023330
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:40:46.909683
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:41:39.510909
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:42:32.433730
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:43:24.867318
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:44:16.933143
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:45:09.739955
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:46:02.728114
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:46:58.579573
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:47:52.756334
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:48:45.269398
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:49:38.181261
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:50:35.253877
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:51:35.810021
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:52:29.073767
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:53:21.790412
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:54:14.439095
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:55:07.115673
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:56:00.697898
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:56:58.923447
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:57:54.999674
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:58:47.960201
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 07:59:41.393708
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:00:34.838280
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:01:29.770730
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:02:25.303875
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:03:17.689265
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:04:09.760951
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:05:02.435644
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:05:57.130513
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:06:53.647982
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.
+
+==================================================
+SESSION: 2026-05-31 08:07:50.815900
+==================================================
+Error: 400 You have insufficient credits to make this request. Please purchase more credits to continue using the service.

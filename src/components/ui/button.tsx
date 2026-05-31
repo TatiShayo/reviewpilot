@@ -2,6 +2,7 @@ import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import Link from "next/link"
 import React from "react"
+import { Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -45,6 +46,7 @@ const buttonVariants = cva(
 type ButtonProps = Omit<ButtonPrimitive.Props, "render"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
+    loading?: boolean
   }
 
 function Button({
@@ -52,14 +54,21 @@ function Button({
   variant = "default",
   size = "default",
   asChild,
+  loading,
+  children,
+  disabled,
   ...props
 }: ButtonProps) {
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      disabled={disabled || loading}
       {...props}
-    />
+    >
+      {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+      {children}
+    </ButtonPrimitive>
   )
 }
 
