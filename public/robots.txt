@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /auth/
+
+# Host
+Host: https://reviewpilot.app
+
+# Sitemaps
+Sitemap: https://reviewpilot.app/sitemap.xml
