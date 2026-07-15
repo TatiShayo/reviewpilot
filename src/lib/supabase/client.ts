@@ -4,7 +4,7 @@ export function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   if (!url || !key) {
-    return createBrowserClient('https://placeholder.supabase.co', 'placeholder-key')
+    throw new Error('Supabase URL and anon key are required. Check your environment variables.')
   }
   return createBrowserClient(url, key)
 }
