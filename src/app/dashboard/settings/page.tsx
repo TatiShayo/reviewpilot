@@ -177,8 +177,8 @@ export default function SettingsPage() {
 
       if (error) throw error
       toast.success('Profile saved')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to save profile')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to save profile')
     } finally {
       setSavingProfile(false)
     }
@@ -203,8 +203,8 @@ export default function SettingsPage() {
 
       if (error) throw error
       toast.success('Response defaults saved')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to save defaults')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to save defaults')
     } finally {
       setSavingDefaults(false)
     }
@@ -228,8 +228,8 @@ export default function SettingsPage() {
 
       if (error) throw error
       toast.success('Notification preferences saved')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to save notifications')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to save notifications')
     } finally {
       setSavingNotifications(false)
     }

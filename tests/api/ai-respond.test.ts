@@ -7,7 +7,7 @@ const mockBusinessSelect = vi.fn()
 const mockProfileUpdate = vi.fn()
 
 vi.mock('openai', () => ({
-  default: function OpenAI(this: any) {
+  default: function OpenAI(this: Record<string, unknown>) {
     this.chat = { completions: { create: mockChatCreate } }
   },
 }))
@@ -72,7 +72,7 @@ describe('POST /api/ai/respond', () => {
       method: 'POST',
       body: JSON.stringify({ review_text: 'Great!', author: 'Jane' }),
     })
-    const res = await POST(req as any)
+    const res = await POST(req as unknown as import("next/server").NextRequest)
     const body = await res.json()
 
     expect(res.status).toBe(401)
@@ -90,7 +90,7 @@ describe('POST /api/ai/respond', () => {
       method: 'POST',
       body: JSON.stringify({}),
     })
-    const res = await POST(req as any)
+    const res = await POST(req as unknown as import("next/server").NextRequest)
     const body = await res.json()
 
     expect(res.status).toBe(400)
@@ -108,7 +108,7 @@ describe('POST /api/ai/respond', () => {
       method: 'POST',
       body: JSON.stringify({ review_text: 'Great!', author: 'Jane' }),
     })
-    const res = await POST(req as any)
+    const res = await POST(req as unknown as import("next/server").NextRequest)
     const body = await res.json()
 
     expect(res.status).toBe(429)
@@ -138,7 +138,7 @@ describe('POST /api/ai/respond', () => {
       method: 'POST',
       body: JSON.stringify({ review_text: 'Great!', author: 'Jane', rating: 5 }),
     })
-    const res = await POST(req as any)
+    const res = await POST(req as unknown as import("next/server").NextRequest)
     const body = await res.json()
 
     expect(res.status).toBe(200)
@@ -161,7 +161,7 @@ describe('POST /api/ai/respond', () => {
       method: 'POST',
       body: JSON.stringify({ review_text: 'Great!', author: 'Jane' }),
     })
-    const res = await POST(req as any)
+    const res = await POST(req as unknown as import("next/server").NextRequest)
     const body = await res.json()
 
     expect(res.status).toBe(500)

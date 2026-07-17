@@ -81,7 +81,7 @@ export default function Home() {
       
       // Success redirect
       router.push('/dashboard');
-    } catch (err: any) {
+    } catch {
       setErrorMsg('An error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -379,7 +379,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-bold text-white mb-2">3 Real-Time Tones</h3>
               <p className="text-sm text-muted leading-relaxed">
-                Choose between Professional, Friendly, or Concise response drafts created using your reviewer's comments.
+                Choose between Professional, Friendly, or Concise response drafts created using your reviewer&apos;s comments.
               </p>
             </div>
 

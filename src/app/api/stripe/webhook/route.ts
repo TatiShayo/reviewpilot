@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
 
         if (userId && subscriptionId) {
           const sub = await stripe.subscriptions.retrieve(subscriptionId)
-          const subAny = sub as any
+          const subAny = sub as unknown as { current_period_start: number; current_period_end: number }
           await supabaseAdmin
             .from('subscriptions')
             .upsert(
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
           .maybeSingle()
 
         if (existing) {
-          const subAny = sub as any
+          const subAny = sub as unknown as { current_period_start: number; current_period_end: number }
           await supabaseAdmin
             .from('subscriptions')
             .update({

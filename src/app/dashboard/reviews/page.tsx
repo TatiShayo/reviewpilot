@@ -176,8 +176,8 @@ function ReviewCard({ review }: { review: ReviewData }) {
 
       setApproved(true)
       toast.success('Response approved' + (user ? '' : ' (mock)'))
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to approve')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to approve')
     } finally {
       setApproving(false)
     }
@@ -203,8 +203,8 @@ function ReviewCard({ review }: { review: ReviewData }) {
       const gmbUrl = `https://business.google.com/reviews/l/${review.business_id}`
       window.open(gmbUrl, '_blank')
       toast.success('Opening Google My Business')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed')
     } finally {
       setPosting(false)
     }

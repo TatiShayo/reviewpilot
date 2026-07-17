@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request })
+  const response = NextResponse.next({ request })
 
   // E2E test bypass — MUST never be honored in production. Guarded behind an
   // explicit non-production env plus a shared secret so a forged cookie cannot

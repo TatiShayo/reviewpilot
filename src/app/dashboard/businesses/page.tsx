@@ -135,6 +135,7 @@ export default function BusinessesPage() {
           toast.success('Business updated (mock)')
         } else {
           const newBusiness: Business = {
+            // eslint-disable-next-line react-hooks/purity -- runs only in the save handler, not during render; a unique mock id needs a non-deterministic source
             id: `b${Date.now()}`,
             ...data,
           }
@@ -143,8 +144,8 @@ export default function BusinessesPage() {
         }
       }
       setDialogOpen(false)
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to save business')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to save business')
     } finally {
       setSaving(false)
     }
@@ -172,13 +173,13 @@ export default function BusinessesPage() {
       }
 
       toast.success(enabled ? 'Auto-responder enabled' : 'Auto-responder disabled')
-    } catch (err: any) {
+    } catch (err) {
       setBusinesses((prev) =>
         prev.map((b) =>
           b.id === business.id ? { ...b, autoRespondEnabled: !enabled } : b
         )
       )
-      toast.error(err.message || 'Failed to toggle auto-responder')
+      toast.error(err instanceof Error ? err.message : 'Failed to toggle auto-responder')
     }
   }
 

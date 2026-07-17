@@ -66,7 +66,10 @@ export default function Dashboard() {
   // Notification Banner State
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' | 'error' } | null>(null);
 
-  // Load Database on Mount
+  // Load Database on Mount. Mount-only initialization that seeds React state
+  // from the mock store; the synchronous setState calls here are the intended
+  // one-time hydration, not a render-loop.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     // Failsafe: if profile is null, sign in default guest
     let prof = mockDb.getProfile();
@@ -94,6 +97,7 @@ export default function Dashboard() {
       setSyncBusinessId(bizs[0].id);
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Auto-scroll ingestion terminal
   useEffect(() => {
@@ -146,7 +150,7 @@ export default function Dashboard() {
     let step = 0;
     const interval = setInterval(() => {
       step += 1;
-      let newLogs = [...logs];
+      const newLogs = [...logs];
       let progress = 0;
 
       if (step === 1) {
@@ -268,27 +272,28 @@ export default function Dashboard() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          reviewText: review.text,
+          review_text: review.text,
+          author: review.author_name || 'A customer',
           rating: review.rating,
-          businessName: bizName,
-          businessCategory: bizCat,
-          tone: 'friendly'
+          business_name: bizName,
+          business_id: review.business_id,
         })
       });
 
       if (!res.ok) throw new Error('Failed to generate response');
 
       const data = await res.json();
-      
-      if (data.variations && Array.isArray(data.variations)) {
-        const friendlyText = data.variations.find((v: any) => v.tone === 'friendly')?.response || data.variations[0]?.response || '';
-        
+
+      if (data.responses && typeof data.responses === 'object') {
+        const responses = data.responses as Record<string, string>;
+
         // Append custom settings signature if available
         const signature = autoSettings?.signature ? `\n\n${autoSettings.signature}` : '';
-        const variationsWithSig = data.variations.map((v: any) => ({
-          tone: v.tone,
-          response: v.response + signature
+        const variationsWithSig = Object.entries(responses).map(([tone, response]) => ({
+          tone,
+          response: (response || '') + signature
         }));
+        const friendlyText = responses.friendly || variationsWithSig[0]?.response || '';
 
         setAiStates(prev => ({
           ...prev,
@@ -302,7 +307,7 @@ export default function Dashboard() {
       } else {
         throw new Error('Invalid response structure');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
       setAiStates(prev => ({
         ...prev,
@@ -354,7 +359,7 @@ export default function Dashboard() {
     mockDb.addResponse({
       review_id: reviewId,
       response_text: state.editedText,
-      tone_used: state.selectedTone as any,
+      tone_used: state.selectedTone as 'professional' | 'friendly' | 'concise',
       ai_generated: true,
       approved_by: profile?.id || 'user-123',
     });
@@ -1230,7 +1235,7 @@ export default function Dashboard() {
                     <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Auto-Reply Voice Tone</label>
                     <select
                       value={autoTone}
-                      onChange={(e) => setAutoTone(e.target.value as any)}
+                      onChange={(e) => setAutoTone(e.target.value as 'professional' | 'friendly' | 'concise')}
                       className="w-full bg-background border border-border text-white text-xs rounded-lg p-2.5 outline-none"
                     >
                       <option value="professional">Professional</option>

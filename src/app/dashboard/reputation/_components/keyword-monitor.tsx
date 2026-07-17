@@ -72,7 +72,7 @@ export function KeywordMonitor({ reviews }: KeywordMonitorProps) {
                       {review.sentiment}
                     </Badge>
                   </div>
-                  <p className="text-gray-600 italic">"{review.text}"</p>
+                  <p className="text-gray-600 italic">&ldquo;{review.text}&rdquo;</p>
                 </div>
               ))
             ) : (
