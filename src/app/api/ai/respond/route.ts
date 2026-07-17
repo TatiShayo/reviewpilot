@@ -1,147 +1,138 @@
-// src/app/api/ai/respond/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { checkUsage, incrementUsage } from '@/lib/gate'
+import { checkRateLimit } from '@/lib/rate-limit'
+import OpenAI from 'openai'
+import { z } from 'zod'
 
-import { NextResponse } from 'next/server';
+// Input contract shared with the reviews dashboard (ReviewCard.handleGenerate).
+const respondSchema = z.object({
+  review_text: z.string().min(1).max(5000),
+  author: z.string().min(1).max(200),
+  rating: z.number().int().min(1).max(5).optional(),
+  business_name: z.string().max(200).optional(),
+  business_id: z.string().max(200).optional(),
+})
 
-function generateRuleBasedResponses(
-  reviewText: string,
-  rating: number,
-  businessName: string,
-  businessCategory: string
-) {
-  const textLower = (reviewText || '').toLowerCase();
-  
-  // Keyword extraction for keyPhrase
-  let keyPhrase = 'your experience';
-  if (textLower.includes('coffee') || textLower.includes('espresso') || textLower.includes('latte') || textLower.includes('matcha')) {
-    keyPhrase = 'our drinks and coffee';
-  } else if (textLower.includes('croissant') || textLower.includes('bagel') || textLower.includes('toast') || textLower.includes('pastry') || textLower.includes('food')) {
-    keyPhrase = 'our food and pastries';
-  } else if (textLower.includes('service') || textLower.includes('waiter') || textLower.includes('server') || textLower.includes('barista') || textLower.includes('staff')) {
-    keyPhrase = 'our staff service';
-  } else if (textLower.includes('wifi') || textLower.includes('internet') || textLower.includes('workspace') || textLower.includes('outlet')) {
-    keyPhrase = 'our cafe workspace atmosphere';
-  } else if (textLower.includes('dentist') || textLower.includes('dr.') || textLower.includes('doctor')) {
-    keyPhrase = 'the care from our doctors';
-  } else if (textLower.includes('cleaning') || textLower.includes('hygienist')) {
-    keyPhrase = 'your teeth cleaning session';
-  } else if (textLower.includes('billing') || textLower.includes('insurance') || textLower.includes('charge')) {
-    keyPhrase = 'our billing and check-out process';
-  } else if (textLower.includes('anxiety') || textLower.includes('fear') || textLower.includes('comfortable')) {
-    keyPhrase = 'our patient comfort experience';
+const TONES = [
+  {
+    key: 'professional',
+    instruction:
+      'Write a professional, courteous reply a business owner would post publicly. Address the reviewer by name if natural.',
+  },
+  {
+    key: 'friendly',
+    instruction:
+      'Write a warm, friendly reply with a personal, approachable tone. A single tasteful emoji is acceptable.',
+  },
+  {
+    key: 'brief',
+    instruction: 'Write a very short, one-to-two sentence reply that is polite and to the point.',
+  },
+] as const
+
+let openaiClient: OpenAI | null = null
+function getOpenAI(): OpenAI {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   }
-
-  const cleanBusinessName = businessName || 'our business';
-  const domain = cleanBusinessName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'business';
-
-  // Sentiment mapping
-  if (rating >= 4) {
-    // Positive
-    return [
-      {
-        tone: 'professional',
-        response: `Thank you for taking the time to share your experience with us. We appreciate your feedback about ${keyPhrase} and are thrilled to hear we met your expectations. We look forward to serving you again at ${cleanBusinessName} in the near future.`
-      },
-      {
-        tone: 'friendly',
-        response: `Thanks so much for the review! 😊 We're so glad you enjoyed ${keyPhrase} and had a great time at ${cleanBusinessName}. Our team is always happy to help make your visit special. Hope to see you back soon!`
-      },
-      {
-        tone: 'concise',
-        response: `Thanks for the positive review! We're glad you enjoyed ${keyPhrase} and appreciate your support for ${cleanBusinessName}.`
-      }
-    ];
-  } else if (rating === 3) {
-    // Neutral
-    return [
-      {
-        tone: 'professional',
-        response: `Thank you for reviewing ${cleanBusinessName}. We appreciate your constructive feedback regarding ${keyPhrase}. We have shared your remarks with our management team to ensure we continue to refine our service.`
-      },
-      {
-        tone: 'friendly',
-        response: `Thanks for sharing your thoughts! We're glad some aspects of your visit to ${cleanBusinessName} went well, and we appreciate the feedback on ${keyPhrase} to help us get better. Hope we can give you a 5-star experience next time!`
-      },
-      {
-        tone: 'concise',
-        response: `Thanks for the feedback. We appreciate your input on ${keyPhrase} and will use it to improve our service at ${cleanBusinessName}.`
-      }
-    ];
-  } else {
-    // Negative
-    return [
-      {
-        tone: 'professional',
-        response: `We appreciate your feedback and regret to hear that your experience with ${keyPhrase} at ${cleanBusinessName} was not satisfactory. We take these matters seriously and are addressing this with our staff. Please contact our manager directly at feedback@${domain}.com so we can investigate and resolve this.`
-      },
-      {
-        tone: 'friendly',
-        response: `We're so sorry you had a disappointing visit. We always aim to deliver a wonderful experience, and it hurts to know we missed the mark on ${keyPhrase}. We'd love to make this right—please reach out to us at care@${domain}.com so we can connect!`
-      },
-      {
-        tone: 'concise',
-        response: `We apologize for the issues you experienced with ${keyPhrase}. We've shared your feedback with the ${cleanBusinessName} team to ensure this is corrected.`
-      }
-    ];
-  }
+  return openaiClient
 }
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const { reviewText, rating, businessName, businessCategory, tone } = await req.json();
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    if (!reviewText || rating === undefined || !businessName) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    // Authentication: this endpoint calls a paid LLM; it must never be public.
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const body = await request.json().catch(() => null)
+    const parsed = respondSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Missing or invalid required fields', details: parsed.error.flatten() },
+        { status: 400 }
+      )
+    }
 
-    if (apiKey) {
-      try {
-        const systemPrompt = `You are a professional business owner. Write a response to this ${rating}-star Google review for ${businessName} (${businessCategory}). Be authentic, address specific points in their review, and never sound AI-generated. Return JSON: { "variations": [{ "tone": "professional", "response": "..." }, { "tone": "friendly", "response": "..." }, { "tone": "concise", "response": "..." }] } — 3 variations: professional, friendly, concise. No preamble. JSON only.`;
+    // Abuse protection #1: short-window per-user rate limit (burst control).
+    const rl = checkRateLimit(`ai-respond:${user.id}`, 20, 60_000)
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Please slow down.' },
+        { status: 429 }
+      )
+    }
 
-        const userPrompt = `Review Text: "${reviewText}"
-Rating: ${rating} Stars
-Business Name: ${businessName}
-Category: ${businessCategory}`;
+    // Abuse protection #2: monthly plan quota (cost control).
+    const usage = await checkUsage(user.id)
+    if (!usage.allowed) {
+      return NextResponse.json(
+        { error: `Usage limit reached for the ${usage.tier} plan. Upgrade to generate more responses.` },
+        { status: 429 }
+      )
+    }
 
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            response_format: { type: 'json_object' },
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userPrompt }
-            ],
-            temperature: 0.7,
-          }),
-        });
+    const { review_text, author, rating, business_name, business_id } = parsed.data
 
-        if (response.ok) {
-          const data = await response.json();
-          const content = data.choices?.[0]?.message?.content;
-          if (content) {
-            const parsed = JSON.parse(content);
-            if (parsed.variations && Array.isArray(parsed.variations)) {
-              return NextResponse.json(parsed);
-            }
-          }
-        }
-      } catch (err) {
-        console.error('OpenAI API request failed, falling back to rule-based generator:', err);
+    // Authorization / IDOR: if a business is referenced, confirm it belongs to
+    // the caller. RLS already scopes this query to the user's own rows, so a
+    // foreign business_id simply yields null and is treated as no context.
+    let ownedBusinessName = business_name
+    if (business_id) {
+      const { data: biz } = await supabase
+        .from('businesses')
+        .select('id, name')
+        .eq('id', business_id)
+        .maybeSingle()
+      if (biz?.name) ownedBusinessName = biz.name
+    }
+
+    const context = [
+      `Business: ${ownedBusinessName || 'the business'}`,
+      rating ? `Star rating: ${rating}/5` : null,
+      `Reviewer: ${author}`,
+      `Review: "${review_text}"`,
+    ]
+      .filter(Boolean)
+      .join('\n')
+
+    let responses: Record<string, string>
+    try {
+      const openai = getOpenAI()
+      const generated: Record<string, string> = {}
+      for (const tone of TONES) {
+        const completion = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You reply to Google reviews on behalf of a business. ${tone.instruction} Never invent facts. Output only the reply text with no preamble.`,
+            },
+            { role: 'user', content: context },
+          ],
+          max_tokens: 300,
+          temperature: 0.7,
+        })
+        generated[tone.key] = completion.choices[0]?.message?.content?.trim() || ''
       }
+      responses = generated
+    } catch (err) {
+      console.error('AI respond generation failed:', err)
+      return NextResponse.json({ error: 'Failed to generate responses' }, { status: 500 })
     }
 
-    // Fallback: Smart rule-based generator
-    const variations = generateRuleBasedResponses(reviewText, rating, businessName, businessCategory);
-    return NextResponse.json({ variations });
+    // Only count usage once generation actually succeeded.
+    await incrementUsage(user.id)
 
-  } catch (error: any) {
-    console.error('Error in AI respond route:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ responses })
+  } catch (err) {
+    console.error('AI respond route error:', err)
+    return NextResponse.json({ error: 'Failed to generate responses' }, { status: 500 })
   }
 }

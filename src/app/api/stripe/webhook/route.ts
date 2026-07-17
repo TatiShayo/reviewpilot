@@ -9,7 +9,7 @@ function getStripe() {
     const key = process.env.STRIPE_SECRET_KEY
     if (!key) throw new Error('STRIPE_SECRET_KEY is not set')
     stripeClient = new Stripe(key, {
-      apiVersion: '2026-05-27.dahlia',
+      apiVersion: '2026-06-24.dahlia',
     })
   }
   return stripeClient
@@ -68,16 +68,19 @@ export async function POST(req: NextRequest) {
           const subAny = sub as any
           await supabaseAdmin
             .from('subscriptions')
-            .upsert({
-              user_id: userId,
-              stripe_customer_id: customerId,
-              stripe_subscription_id: subscriptionId,
-              stripe_price_id: sub.items.data[0]?.price.id,
-              status: sub.status,
-              current_period_start: new Date(subAny.current_period_start * 1000).toISOString(),
-              current_period_end: new Date(subAny.current_period_end * 1000).toISOString(),
-              cancel_at_period_end: sub.cancel_at_period_end,
-            })
+            .upsert(
+              {
+                user_id: userId,
+                stripe_customer_id: customerId,
+                stripe_subscription_id: subscriptionId,
+                stripe_price_id: sub.items.data[0]?.price.id,
+                status: sub.status,
+                current_period_start: new Date(subAny.current_period_start * 1000).toISOString(),
+                current_period_end: new Date(subAny.current_period_end * 1000).toISOString(),
+                cancel_at_period_end: sub.cancel_at_period_end,
+              },
+              { onConflict: 'user_id' }
+            )
 
           await setSubscriptionTier(userId, tier)
           await resetUsage(userId)
@@ -157,7 +160,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ received: true })
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    console.error('stripe webhook handler failed:', err)
+    return NextResponse.json({ error: 'Webhook handler error' }, { status: 500 })
   }
 }

@@ -1,16 +1,24 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { sendDigestEmail } from '@/lib/digest-email'
 
-export async function GET() {
-  if (
-    process.env.CRON_SECRET &&
-    process.env.CRON_SECRET !== (process.env.CRON_SECRET_HEADER || '')
-  ) {
-    // Not called by Vercel cron — check auth header
+export async function GET(request: NextRequest) {
+  // Authorization: only the scheduler may trigger this. Vercel Cron sends
+  // `Authorization: Bearer <CRON_SECRET>`. Without a configured secret the
+  // endpoint refuses to run rather than fail open.
+  const secret = process.env.CRON_SECRET
+  if (!secret) {
+    return NextResponse.json({ error: 'Cron not configured' }, { status: 503 })
+  }
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabase = await createClient()
+  // Service-role client: the digest legitimately reads every subscriber's data,
+  // which RLS (correctly) blocks for a normal session. This runs only after the
+  // cron-secret check above.
+  const supabase = createAdminClient()
 
   const { data: profiles } = await supabase
     .from('profiles')

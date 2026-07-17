@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 
 let stripeClient: Stripe | null = null
@@ -10,7 +11,7 @@ function getStripe() {
     const key = process.env.STRIPE_SECRET_KEY
     if (!key) throw new Error('STRIPE_SECRET_KEY is not set')
     stripeClient = new Stripe(key, {
-      apiVersion: '2026-05-27.dahlia',
+      apiVersion: '2026-06-24.dahlia',
     })
   }
   return stripeClient
@@ -66,11 +67,18 @@ export async function POST(req: NextRequest) {
       })
       customerId = customer.id
 
-      await supabase.from('subscriptions').upsert({
-        user_id: user.id,
-        stripe_customer_id: customerId,
-        status: 'inactive',
-      })
+      // subscriptions is server-authoritative (no user-level INSERT policy under
+      // RLS). Persist the stub via the service-role client so the Stripe
+      // customer id survives across checkout attempts and we don't create
+      // duplicate customers.
+      await createAdminClient().from('subscriptions').upsert(
+        {
+          user_id: user.id,
+          stripe_customer_id: customerId,
+          status: 'inactive',
+        },
+        { onConflict: 'user_id' }
+      )
     }
 
     if (sub?.stripe_subscription_id && (sub.status === 'active' || sub.status === 'trialing')) {
@@ -106,7 +114,8 @@ export async function POST(req: NextRequest) {
     })
 
     return NextResponse.json({ url: session.url })
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    console.error('stripe checkout failed:', err)
+    return NextResponse.json({ error: 'Checkout failed' }, { status: 500 })
   }
 }

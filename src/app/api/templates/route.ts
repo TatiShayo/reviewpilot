@@ -19,7 +19,10 @@ export async function GET() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: true })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('templates GET failed:', error)
+    return NextResponse.json({ error: 'Failed to load templates' }, { status: 500 })
+  }
   return NextResponse.json({ templates: data })
 }
 
@@ -41,7 +44,10 @@ export async function POST(request: NextRequest) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('templates POST failed:', error)
+    return NextResponse.json({ error: 'Failed to create template' }, { status: 500 })
+  }
   return NextResponse.json({ template: data })
 }
 
@@ -61,6 +67,9 @@ export async function DELETE(request: NextRequest) {
     .eq('id', id)
     .eq('user_id', user.id)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('templates DELETE failed:', error)
+    return NextResponse.json({ error: 'Failed to delete template' }, { status: 500 })
+  }
   return NextResponse.json({ success: true })
 }

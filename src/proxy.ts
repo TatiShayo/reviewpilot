@@ -4,7 +4,14 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
 
-  if (request.cookies.get('e2e_bypass')?.value === '1') {
+  // E2E test bypass — MUST never be honored in production. Guarded behind an
+  // explicit non-production env plus a shared secret so a forged cookie cannot
+  // skip auth on a live deployment.
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.E2E_BYPASS_SECRET &&
+    request.cookies.get('e2e_bypass')?.value === process.env.E2E_BYPASS_SECRET
+  ) {
     return response
   }
 

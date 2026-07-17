@@ -30,7 +30,10 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await query
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('competitors GET failed:', error)
+    return NextResponse.json({ error: 'Failed to load competitors' }, { status: 500 })
+  }
 
   const snapshotQuery = supabase
     .from('competitor_snapshots')
@@ -73,7 +76,10 @@ export async function POST(request: NextRequest) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('competitors POST failed:', error)
+    return NextResponse.json({ error: 'Failed to create competitor' }, { status: 500 })
+  }
   return NextResponse.json({ competitor: data })
 }
 
@@ -93,6 +99,9 @@ export async function DELETE(request: NextRequest) {
     .eq('id', id)
     .eq('user_id', user.id)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('competitors DELETE failed:', error)
+    return NextResponse.json({ error: 'Failed to delete competitor' }, { status: 500 })
+  }
   return NextResponse.json({ success: true })
 }

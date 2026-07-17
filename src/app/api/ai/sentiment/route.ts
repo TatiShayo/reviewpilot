@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { checkRateLimit } from '@/lib/rate-limit'
 import OpenAI from 'openai'
 import { z } from 'zod'
 
@@ -23,6 +24,12 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Abuse protection: burst limit on this paid-LLM endpoint.
+    const rl = checkRateLimit(`ai-sentiment:${user.id}`, 30, 60_000)
+    if (!rl.allowed) {
+      return NextResponse.json({ error: 'Rate limit exceeded. Please slow down.' }, { status: 429 })
     }
 
     const body = await request.json()
