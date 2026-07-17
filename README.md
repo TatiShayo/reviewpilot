@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReviewPilot
 
-## Getting Started
+**AI-powered Google review management for local businesses.** Pull in your
+reviews, generate on-brand replies in three tones, track sentiment and
+competitors, and get a weekly performance digest — all from one dashboard.
 
-First, run the development server:
+Built with Next.js 16 (App Router), Supabase, Stripe, and OpenAI.
+
+---
+
+## Features
+
+- **AI response generation** — three tones (professional / friendly / brief) per
+  review, quota-metered and rate-limited.
+- **Sentiment analysis** — automatic positive / neutral / negative classification.
+- **Multi-location management** — businesses, reviews, and responses per account.
+- **Response templates** — reusable style references that steer the AI.
+- **Competitor tracking** — rating snapshots and velocity charts.
+- **Reputation dashboard** — keyword monitoring and analytics.
+- **Billing** — Stripe Checkout + Billing Portal with free / pro / business tiers.
+- **Weekly email digest** — Resend-powered, scheduled via Vercel Cron.
+
+## Tech stack
+
+Next.js 16 · React 19 · TypeScript (strict) · Supabase (Postgres + Auth + RLS) ·
+Stripe · OpenAI `gpt-4o-mini` · Resend · Tailwind CSS v4 · Vitest · Cypress.
+
+## Security posture
+
+This codebase has been through a full security audit (`REVIEW_FINDINGS.md`).
+Highlights:
+
+- Every API route checks **authorization**, not just authentication; writes are
+  ownership-scoped and IDOR-safe.
+- **Row-Level Security** is enabled on every table with default-deny; billing and
+  usage columns are protected by a trigger against client-side privilege
+  escalation.
+- Paid-LLM endpoints require auth and are **quota- + rate-limited** to prevent
+  denial-of-wallet abuse.
+- Stripe webhooks are signature-verified and idempotent.
+- Security headers (HSTS, X-Frame-Options, X-Content-Type-Options,
+  Referrer-Policy) are set globally; internal errors are never leaked to clients.
+
+See `ARCHITECTURE.md` for the full system map and `REVIEW_FINDINGS.md` for the
+findings log.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=      # server-only: webhook, cron, checkout stub
+OPENAI_API_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+CRON_SECRET=                    # required to run the digest cron
+# E2E_BYPASS_SECRET=            # optional, non-production Cypress auth bypass
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Apply the SQL in `supabase/migrations/` (001 → 007, in order) to a Supabase
+project.
 
-## Learn More
+## Scripts & gate
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx tsc --noEmit                                  # types
+npx eslint                                        # lint
+NODE_OPTIONS=--max-old-space-size=4096 npx next build   # build
+npx vitest run                                    # unit / route tests
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All four are green on `main`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project layout
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/            App Router pages + /api route handlers
+  components/     UI components
+  lib/            supabase clients, gate (quota), rate-limit, mock data, email
+  proxy.ts        Next 16 proxy (auth middleware)
+supabase/migrations/   Postgres schema + RLS (001–007)
+tests/ , test/         Vitest suites
+```
