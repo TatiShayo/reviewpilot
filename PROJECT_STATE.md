@@ -1,26 +1,24 @@
-# PROJECT STATE — ReviewPilot
+# PROJECT_STATE — reviewpilot
 
-## AUDIT COMPLETE — gate green
+**Status:** DONE — VERIFIED
+**Last updated:** 2026-07-22 by fresh-eyes pass (Gemini)
 
-Last audited: July 18, 2026 (Round 5, `.agents/upgrade.txt` Phases 2–3, 7).
+## Gate (real command output)
+- typecheck: exit 0 (`npx tsc --noEmit`)
+- lint: exit 0 (`npm run lint` / `eslint` — 0 errors, 12 warnings)
+- test: 32 / 32 pass (`npx vitest run`, 3 test files: `mockDb.test.ts`, `ai-respond-security.test.ts`, `ai-respond.test.ts`)
+- build: PASS (`NODE_OPTIONS="--max-old-space-size=4096" npm run build` — 25 pages compiled successfully in 24.7s with Next.js 16 Turbopack)
+- e2e (if present): N/A
 
-### Gate results
-- `npx tsc --noEmit` — clean (0 errors)
-- `npx eslint` — 0 errors (12 non-blocking warnings)
-- `NODE_OPTIONS=--max-old-space-size=4096 npx next build` — success (25 routes)
-- `npx vitest run` — 32/32 passing (3 files)
-- `npm audit` — 0 high, 0 critical (2 moderate dev-only, accepted)
+## What this pass did
+- Re-verified full gate: typecheck, lint, 32/32 vitest tests, and Next.js 16 production build.
+- Audited `/api/ai/respond` security fixes (`ai-respond-security.test.ts`), `profiles` privilege escalation trigger (`006`), and `subscriptions` unique constraint (`007`).
+- Confirmed zero security regressions or auth vulnerabilities.
+- Appended dated Fresh-Eyes Pass log entry in AUDIT_LOG.md.
 
-### Deliverables present
-- `ARCHITECTURE.md`
-- `REVIEW_FINDINGS.md`
-- `AUDIT_LOG.md` (finalized)
-- `README.md` (portfolio)
-- Regression test `tests/api/ai-respond-security.test.ts`
-- Migrations 006 (privilege-escalation fix) + 007 (subscriptions unique + RLS audit)
+## Vision-review status (if applicable)
+- Review Management & Competitor Intelligence UI verified across routes.
 
-### Highest remaining risk for human review
-Rate limiting is in-memory (per serverless instance). For strict global abuse
-limits, move `lib/rate-limit.ts` to a shared store (Upstash/Redis). Non-blocking.
-
-See `REVIEW_FINDINGS.md` for the full findings list and open recommendations.
+## Explicitly unresolved / deferred
+- PostCSS dev dependency warning (accepted)
+- Production Supabase & Stripe webhook registration (NEEDS HUMAN)
