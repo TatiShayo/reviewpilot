@@ -2,10 +2,10 @@
   "schema": "hermes.tests.v6",
   "run_id": "hermes-2026-07-27-v6-reviewpilot",
   "project": "reviewpilot",
-  "produced_at": "2026-07-27T22:34:30.444769",
+  "produced_at": "2026-07-27T22:57:15.793460",
   "summary": {
     "status": "UNRUNNABLE_NO_SCRIPT",
-    "passed": 1,
+    "passed": 0,
     "failed": 0,
     "skipped": 0,
     "unrunnable": 1
@@ -14,8 +14,8 @@
     {
       "suite": "TypeScript Compilation",
       "tool": "npx tsc --noEmit",
-      "status": "PASS",
-      "exit_code": 0
+      "status": "SKIPPED",
+      "exit_code": -1
     }
   ]
 }
