@@ -3,7 +3,7 @@
   "run_id": "hermes-2026-07-27-v6-reviewpilot",
   "project": "reviewpilot",
   "phase": "4.0",
-  "produced_at": "2026-07-27T22:57:15.793460",
+  "produced_at": "2026-07-27T23:08:20.887416",
   "runner_tier": "T1",
   "mode": "static-only",
   "findings": [
