@@ -71,7 +71,8 @@ export async function GET(request: NextRequest) {
       if (!email) continue
 
       const now = new Date()
-      const weekLabel = `${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+      const startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+      const weekLabel = `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
 
       const sent = await sendDigestEmail(email, profile.full_name || 'there', {
         newReviews: totalReviews,
@@ -79,6 +80,7 @@ export async function GET(request: NextRequest) {
         avgRating,
         responseRate,
         weekLabel,
+        tenantId: profile.id,
       })
 
       results.push({ user: profile.id, success: sent.success })

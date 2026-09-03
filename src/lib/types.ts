@@ -45,3 +45,39 @@ export interface CompetitorRatingData {
   rating: number
   date: string
 }
+
+export type {
+  ReviewRatingItem,
+  RatingSummary,
+  StarDistribution,
+  RatingDistributionMap,
+  NPSResult,
+  VelocityPeriod,
+  VelocityAnalysis,
+} from './rating-calculations'
+
+export type {
+  SentimentClassificationResult,
+} from './sentiment'
+
+export type {
+  EmbedTokenPayload,
+} from './embed-token'
+
+export type {
+  WidgetConfig,
+} from './widget-config'
+
+export type {
+  CampaignRecipient,
+  ReviewRequestCampaignConfig,
+  CampaignBatchResult,
+} from './campaign-manager'
+
+export type {
+  UnsubscribeTokenPayload,
+} from './unsubscribe'
+
+export type {
+  TenantRole,
+} from './tenant-isolation'
