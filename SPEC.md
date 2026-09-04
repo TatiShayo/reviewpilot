@@ -1,18 +1,21 @@
-# ReviewPilot — Product Spec
+# SPEC 001: Reputation Management & Sentiment Routing Engine
 
-**Tagline:** "Respond to every review in one click. Sound human every time."
+## Problem Statement
+Local businesses struggle to collect consistent Google reviews and fear negative public ratings from resolvable misunderstandings.
 
-**Problem:** 53% of customers expect review replies within 7 days. Most SMBs respond to <10% of reviews.
+## Solution
+An automated review collection engine that requests feedback after purchases, routes unhappy customers to private managers for resolution, and keeps public review links FTC-compliant.
 
-**Solution:** Connect Google My Business, auto-generate AI responses to every review, approve+post in 1 click.
+## User Stories
+1. As a business owner, I want automated SMS review invites sent after sales, so that happy customers leave Google reviews.
+2. As a dissatisfied customer, I want to voice my complaint directly to management, so that my issue is solved privately.
+3. As a business owner, I want review requests to function even if external AI is down, so that our customer flow is never lost.
 
-**Pricing:**
-- Free: 50 AI responses/mo
-- Pro: $15/mo (unlimited, multi-location)
-- Business: $29/mo (white-label, team)
+## Implementation Decisions
+- Implement offline sentiment parser in `src/lib/sentiment.ts`.
+- TCPA unsubscribe handler in `src/lib/messaging.ts`.
+- Public platform link generator in `src/lib/platforms.ts`.
 
-**Kills:** Birdeye ($299+/mo), Podium ($249+/mo), Grade.us ($110+/mo)
-
-**Stack:** Next.js 14 App Router, Supabase, Stripe, OpenAI GPT-4o-mini, Resend, Google My Business API (OAuth)
-
-**Target:** Small business owners (restaurants, dental clinics, auto shops, salons)
+## Testing Decisions
+- Seam: `tests/offline-sentiment-fallback.test.ts`.
+- Verify classification accuracy on positive, negative, and neutral customer feedback without network calls.
