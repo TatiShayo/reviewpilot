@@ -55,14 +55,8 @@ export default function Dashboard() {
   const [autoSignature, setAutoSignature] = useState('');
   const [autoBlacklist, setAutoBlacklist] = useState('');
 
-  // Checkout modal simulation
-  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
-  const [checkoutPlan, setCheckoutPlan] = useState<'pro' | 'business'>('pro');
-  const [cardName, setCardName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCvc, setCardCvc] = useState('');
-  const [isPaying, setIsPaying] = useState(false);
+  // Stripe Checkout redirect state (card data never touches the client)
+  const [isUpgrading, setIsUpgrading] = useState(false);
 
   // Notification Banner State
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' | 'error' } | null>(null);
@@ -455,39 +449,30 @@ export default function Dashboard() {
   };
 
   // ----------------------------------------------------
-  // Stripe Subscription Simulation
+  // Stripe Subscription Upgrade (real Stripe Checkout)
   // ----------------------------------------------------
-  const handleUpgradeClick = (tier: 'pro' | 'business') => {
-    setCheckoutPlan(tier);
-    setCheckoutModalOpen(true);
-  };
-
-  const handleProcessPayment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!cardName || !cardNumber) {
-      showNotification('Please fill in credit card details.', 'error');
-      return;
+  // No card fields exist on this page: the real /api/stripe/checkout route
+  // (auth + zod-validated tier) creates the session and we redirect to
+  // Stripe-hosted Checkout, so PAN/CVV never enter React state.
+  const handleUpgrade = async (tier: 'pro' | 'business') => {
+    setIsUpgrading(true);
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        showNotification(data.error || 'Checkout could not be started.', 'error');
+        return;
+      }
+      window.location.href = data.url;
+    } catch {
+      showNotification('Checkout could not be started.', 'error');
+    } finally {
+      setIsUpgrading(false);
     }
-    setIsPaying(true);
-
-    setTimeout(() => {
-      // Complete mock payment
-      mockDb.upgradeSubscription(checkoutPlan);
-      setSubscription(mockDb.getSubscription());
-      
-      // Update profile locally
-      const prof = mockDb.getProfile();
-      setProfile(prof);
-
-      setIsPaying(false);
-      setCheckoutModalOpen(false);
-      setCardName('');
-      setCardNumber('');
-      setCardExpiry('');
-      setCardCvc('');
-      
-      showNotification(`Subscription upgraded to ${checkoutPlan.toUpperCase()} successfully!`, 'success');
-    }, 1500);
   };
 
   const handleCancelSub = () => {
@@ -1510,10 +1495,11 @@ export default function Dashboard() {
                     </div>
                     {profile?.subscription_tier === 'free' ? (
                       <button
-                        onClick={() => handleUpgradeClick('pro')}
-                        className="mt-4 w-full bg-accent hover:bg-accent-hover text-white text-xs font-bold py-2 rounded-lg transition-colors cursor-pointer"
+                        onClick={() => handleUpgrade('pro')}
+                        disabled={isUpgrading}
+                        className="mt-4 w-full bg-accent hover:bg-accent-hover disabled:bg-accent/40 text-white text-xs font-bold py-2 rounded-lg transition-colors cursor-pointer"
                       >
-                        Upgrade to Pro
+                        {isUpgrading ? 'Redirecting…' : 'Upgrade to Pro'}
                       </button>
                     ) : (
                       profile?.subscription_tier === 'pro' && (
@@ -1533,100 +1519,6 @@ export default function Dashboard() {
 
         </div>
       </main>
-
-      {/* Stripe Payment Checkout Simulator Overlay */}
-      {checkoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-          <div className="bg-surface border border-border rounded-2xl w-full max-w-md p-6 shadow-2xl relative animate-scaleUp">
-            
-            <button 
-              onClick={() => setCheckoutModalOpen(false)}
-              className="absolute top-4 right-4 text-muted hover:text-white cursor-pointer"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <span className="text-[9px] font-semibold text-accent uppercase tracking-wider border border-accent/20 px-2 py-0.5 rounded bg-accent/5">
-              Secure Stripe Checkout Simulation
-            </span>
-
-            <h3 className="text-lg font-bold text-white mt-4 mb-1">
-              Upgrade to {checkoutPlan.toUpperCase()}
-            </h3>
-            <p className="text-xs text-muted mb-6">
-              Plan cost: <strong className="text-white">${checkoutPlan === 'pro' ? '15.00' : '29.00'}/month</strong>. Recurring billing.
-            </p>
-
-            <form onSubmit={handleProcessPayment} className="space-y-4">
-              <div>
-                <label className="block text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">Name on Credit Card</label>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="Alex Johnson" 
-                  value={cardName}
-                  onChange={(e) => setCardName(e.target.value)}
-                  className="w-full bg-background border border-border focus:border-accent text-white rounded-lg p-2.5 text-xs outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">Card Number</label>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="4242 4242 4242 4242" 
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value)}
-                  className="w-full bg-background border border-border focus:border-accent text-white rounded-lg p-2.5 text-xs outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">Expiry Date</label>
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="MM/YY" 
-                    value={cardExpiry}
-                    onChange={(e) => setCardExpiry(e.target.value)}
-                    className="w-full bg-background border border-border focus:border-accent text-white rounded-lg p-2.5 text-xs outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">CVC Code</label>
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="123" 
-                    value={cardCvc}
-                    onChange={(e) => setCardCvc(e.target.value)}
-                    className="w-full bg-background border border-border focus:border-accent text-white rounded-lg p-2.5 text-xs outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="bg-background/50 border border-border/80 rounded-xl p-3 text-[10px] text-muted flex gap-2">
-                <svg className="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>This payment is simulated for demonstration. Your card will not be charged. Clicking submit triggers instantaneous database record update.</span>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isPaying}
-                className="w-full bg-accent hover:bg-accent-hover disabled:bg-accent/40 text-white font-bold py-3 rounded-lg text-xs transition-all shadow-md shadow-accent/20 cursor-pointer"
-              >
-                {isPaying ? 'Processing Payment...' : `Pay $15.00 Now`}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
