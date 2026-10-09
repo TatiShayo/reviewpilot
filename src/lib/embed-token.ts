@@ -30,7 +30,10 @@ function getEmbedSecret(customSecret?: string): string {
  * Generates a signed embed token for widget embedding.
  */
 export function generateWidgetEmbedToken(
-  payload: Omit<EmbedTokenPayload, 'expiresAt'> & { expiresInMs?: number },
+  payload: Omit<EmbedTokenPayload, 'expiresAt' | 'allowedDomains'> & {
+    allowedDomains?: string[]
+    expiresInMs?: number
+  },
   secret?: string
 ): string {
   const activeSecret = getEmbedSecret(secret)
@@ -38,7 +41,7 @@ export function generateWidgetEmbedToken(
   const fullPayload: EmbedTokenPayload = {
     businessId: payload.businessId,
     tenantId: payload.tenantId,
-    allowedDomains: payload.allowedDomains || ['*'],
+    allowedDomains: payload.allowedDomains || [],
     expiresAt: Date.now() + expiresInMs,
     permissions: payload.permissions || ['read', 'write', 'display'],
   }
@@ -56,7 +59,13 @@ export function generateWidgetEmbedToken(
  * Checks if a given request origin matches the allowed domains list.
  */
 export function isOriginAllowed(origin: string | null | undefined, allowedDomains: string[]): boolean {
-  if (!allowedDomains || allowedDomains.length === 0 || allowedDomains.includes('*')) {
+  // Fail closed: an empty (or missing) allowlist permits nothing. The only
+  // way to explicitly allow every origin is a wildcard entry.
+  if (!allowedDomains || allowedDomains.length === 0) {
+    return false
+  }
+
+  if (allowedDomains.includes('*')) {
     return true
   }
 
@@ -135,8 +144,20 @@ export function verifyWidgetEmbedToken(
     return { valid: false, error: 'Embed token has expired' }
   }
 
-  // Domain / Origin check
-  if (requestOrigin && !isOriginAllowed(requestOrigin, payload.allowedDomains)) {
+  // Domain / Origin check. Fail closed when the Origin header is absent: a
+  // token restricted to specific domains must not be replayable by a client
+  // that simply omits Origin (curl, same-origin fetch, non-browser client).
+  // An explicit wildcard token intentionally allows every origin, including
+  // origin-less requests.
+  if (!requestOrigin) {
+    const domains = payload.allowedDomains ?? []
+    if (!domains.includes('*')) {
+      return {
+        valid: false,
+        error: 'Missing Origin header; this embed token restricts embedding to specific domains',
+      }
+    }
+  } else if (!isOriginAllowed(requestOrigin, payload.allowedDomains)) {
     return { valid: false, error: `Origin '${requestOrigin}' not permitted by this embed token` }
   }
 

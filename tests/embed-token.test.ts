@@ -103,6 +103,52 @@ describe('Widget Embed Token & CORS Security Suite', () => {
       expect(isOriginAllowed(null, ['example.com'])).toBe(false)
       expect(isOriginAllowed(undefined, ['example.com'])).toBe(false)
     })
+
+    it('denies every origin when the allowlist is empty (fail closed)', () => {
+      expect(isOriginAllowed('https://example.com', [])).toBe(false)
+      expect(isOriginAllowed(null, [])).toBe(false)
+    })
+  })
+
+  describe('origin-less requests (fail closed on restricted tokens)', () => {
+    it('rejects a domain-restricted token when the Origin header is absent', () => {
+      const token = generateWidgetEmbedToken(
+        {
+          businessId: 'biz-123',
+          tenantId: 'user-456',
+          allowedDomains: ['example.com'],
+        },
+        testSecret
+      )
+
+      const verification = verifyWidgetEmbedToken(token, undefined, testSecret)
+      expect(verification.valid).toBe(false)
+      expect(verification.error).toContain('Missing Origin header')
+    })
+
+    it('still allows a wildcard token without an Origin header (explicit opt-in)', () => {
+      const token = generateWidgetEmbedToken(
+        {
+          businessId: 'biz-123',
+          tenantId: 'user-456',
+          allowedDomains: ['*'],
+        },
+        testSecret
+      )
+
+      expect(verifyWidgetEmbedToken(token, undefined, testSecret).valid).toBe(true)
+    })
+
+    it('defaults allowedDomains to [] so an unspecified token works nowhere', () => {
+      // No allowedDomains passed: the token must not implicitly allow all origins.
+      const token = generateWidgetEmbedToken(
+        { businessId: 'biz-123', tenantId: 'user-456' },
+        testSecret
+      )
+
+      expect(verifyWidgetEmbedToken(token, 'https://example.com', testSecret).valid).toBe(false)
+      expect(verifyWidgetEmbedToken(token, undefined, testSecret).valid).toBe(false)
+    })
   })
 
   describe('getWidgetSecurityHeaders', () => {
