@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { mockDb, Review, Business, Profile, Response, Template, AutoResponderSettings, Subscription } from '@/lib/mockDb';
+import { createClient } from '@/lib/supabase/client';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -71,32 +72,57 @@ export default function Dashboard() {
   // one-time hydration, not a render-loop.
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    // Failsafe: if profile is null, sign in default guest
-    let prof = mockDb.getProfile();
-    if (!prof) {
-      prof = mockDb.login('owner@dailygrind.com', 'Alex Johnson', 'The Daily Grind Cafe & Health Co.');
-    }
-    setProfile(prof);
-    
-    // Sync state
-    setSubscription(mockDb.getSubscription());
-    setBusinesses(mockDb.getBusinesses());
-    setReviews(mockDb.getReviews());
-    setTemplates(mockDb.getTemplates());
-    
-    const settings = mockDb.getAutoResponderSettings();
-    setAutoSettings(settings);
-    setAutoEnabled(settings.enabled);
-    setAutoTone(settings.tone);
-    setAutoSignature(settings.signature);
-    setAutoBlacklist(settings.blacklistedWords.join(', '));
+    // No demo auto-login. The dashboard follows the real Supabase session:
+    // unauthenticated visitors are sent to /login instead of being silently
+    // signed in as a hardcoded demo user, and the mock profile is seeded from
+    // the authenticated identity.
+    let cancelled = false;
 
-    // Default select business for Sync tab
-    const bizs = mockDb.getBusinesses();
-    if (bizs.length > 0) {
-      setSyncBusinessId(bizs[0].id);
-    }
-  }, []);
+    void (async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (cancelled) return
+
+      if (!user) {
+        router.replace('/login')
+        return
+      }
+
+      let prof = mockDb.getProfile();
+      if (!prof || prof.email !== user.email) {
+        prof = mockDb.login(
+          user.email ?? '',
+          (user.user_metadata?.full_name as string | undefined) ?? '',
+          (user.user_metadata?.company_name as string | undefined) ?? ''
+        );
+      }
+      if (cancelled) return
+      setProfile(prof);
+
+      // Sync state
+      setSubscription(mockDb.getSubscription());
+      setBusinesses(mockDb.getBusinesses());
+      setReviews(mockDb.getReviews());
+      setTemplates(mockDb.getTemplates());
+
+      const settings = mockDb.getAutoResponderSettings();
+      setAutoSettings(settings);
+      setAutoEnabled(settings.enabled);
+      setAutoTone(settings.tone);
+      setAutoSignature(settings.signature);
+      setAutoBlacklist(settings.blacklistedWords.join(', '));
+
+      // Default select business for Sync tab
+      const bizs = mockDb.getBusinesses();
+      if (bizs.length > 0) {
+        setSyncBusinessId(bizs[0].id);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   // Auto-scroll ingestion terminal
