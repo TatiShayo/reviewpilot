@@ -27,6 +27,7 @@ const mockProfileSelect = vi.fn()
 const mockBusinessMaybeSingle = vi.fn()
 const mockProfileUpdate = vi.fn()
 const mockChatCreate = vi.fn()
+const mockRpc = vi.fn()
 
 vi.mock('openai', () => ({
   default: function OpenAI(this: Record<string, unknown>) {
@@ -37,6 +38,7 @@ vi.mock('openai', () => ({
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn().mockImplementation(() => ({
     auth: { getUser: mockGetUser },
+    rpc: mockRpc,
     from: (table: string) => {
       if (table === 'profiles') {
         return {
@@ -71,7 +73,10 @@ function post(body: unknown) {
 }
 
 describe('SECURITY /api/ai/respond — auth + IDOR regression', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockRpc.mockResolvedValue({ data: 1, error: null })
+  })
 
   it('rejects anonymous callers with 401 (was 200 before the fix)', async () => {
     mockGetUser.mockResolvedValue({ data: { user: null }, error: null })

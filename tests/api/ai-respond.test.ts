@@ -5,6 +5,7 @@ const mockGetUser = vi.fn()
 const mockProfileSelect = vi.fn()
 const mockBusinessSelect = vi.fn()
 const mockProfileUpdate = vi.fn()
+const mockRpc = vi.fn()
 
 vi.mock('openai', () => ({
   default: function OpenAI(this: Record<string, unknown>) {
@@ -15,6 +16,7 @@ vi.mock('openai', () => ({
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn().mockImplementation(() => ({
     auth: { getUser: mockGetUser },
+    rpc: mockRpc,
     from: (table: string) => {
       if (table === 'profiles') {
         return {
@@ -62,6 +64,7 @@ vi.mock('next/server', () => ({
 describe('POST /api/ai/respond', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockRpc.mockResolvedValue({ data: 1, error: null })
   })
 
   it('returns 401 when not authenticated', async () => {
@@ -146,6 +149,8 @@ describe('POST /api/ai/respond', () => {
     expect(body.responses.professional).toBe('Professional response here.')
     expect(body.responses.friendly).toBe('Friendly response here! 😊')
     expect(body.responses.brief).toBe('Brief thanks!')
+    // Usage is metered via the atomic RPC, not a read-modify-write.
+    expect(mockRpc).toHaveBeenCalledWith('increment_responses_used', { p_user_id: 'user1' })
   })
 
   it('returns 500 when OpenAI fails', async () => {
