@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   classifySentimentHeuristic,
-  parseLlmSentimentResponse,
+  parseOrFallbackLLMSentiment,
 } from "../src/lib/sentiment";
 
 describe("ReviewPilot Offline Sentiment Fallback & Heuristics", () => {
@@ -30,7 +30,7 @@ describe("ReviewPilot Offline Sentiment Fallback & Heuristics", () => {
     const malformedOutput = "Here is my thoughts: I don't know the JSON format sorry!";
     const reviewText = "Absolutely horrible service, rude waiter and cold food!";
     
-    const result = parseLlmSentimentResponse(malformedOutput, reviewText, 1);
+    const result = parseOrFallbackLLMSentiment(malformedOutput, reviewText, 1);
     expect(result.method).toBe("heuristic");
     expect(result.sentiment).toBe("negative");
     expect(result.score).toBeLessThan(-0.3);
