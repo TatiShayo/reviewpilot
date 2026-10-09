@@ -8,8 +8,22 @@ export interface EmbedTokenPayload {
   permissions?: ('read' | 'write' | 'display')[]
 }
 
+/**
+ * Embed-token signing secret.
+ *
+ * Fails closed: with a known default anyone can mint a token for ANY tenant and
+ * read their widget data.
+ */
 function getEmbedSecret(customSecret?: string): string {
-  return customSecret || process.env.EMBED_TOKEN_SECRET || 'reviewpilot_embed_secret_default_key_secure_256'
+  if (customSecret) return customSecret;
+  const secret = process.env.EMBED_TOKEN_SECRET;
+  if (secret) return secret;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "EMBED_TOKEN_SECRET must be set in production — embed tokens would otherwise be forgeable"
+    );
+  }
+  return "dev-only-embed-secret";
 }
 
 /**

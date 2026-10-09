@@ -9,8 +9,22 @@ export interface UnsubscribeTokenPayload {
   expiresAt: number
 }
 
+/**
+ * Unsubscribe-token signing secret.
+ *
+ * Fails closed: a known default lets anyone mint a valid unsubscribe token for
+ * any address, suppressing recipients from a list.
+ */
 function getUnsubscribeSecret(customSecret?: string): string {
-  return customSecret || process.env.UNSUBSCRIBE_SECRET || 'reviewpilot_unsubscribe_hmac_secret_key_384bit'
+  if (customSecret) return customSecret;
+  const secret = process.env.UNSUBSCRIBE_SECRET;
+  if (secret) return secret;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "UNSUBSCRIBE_SECRET must be set in production — unsubscribe tokens would otherwise be forgeable"
+    );
+  }
+  return "dev-only-unsubscribe-secret";
 }
 
 // In-memory suppression list for tests and fast server checks
